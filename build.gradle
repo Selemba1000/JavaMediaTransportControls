@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.selemba'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'net.java.dev.jna:jna:5.13.0'
+    implementation 'com.github.hypfvieh:dbus-java-core:4.3.1'
+    implementation 'com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:4.3.1'
+}
+
+test {
+    useJUnitPlatform()
+}
