@@ -7,30 +7,35 @@ public class GeneralTest {
 
     @Test
     void test() throws InterruptedException {
-        MediaTransportControls control = MediaTransportControls.getInstance("");
+        MediaTransportControls control = MediaTransportControls.getInstance("free-danza");
         MediaTransportControlsCallbacks callbacks = new MediaTransportControlsCallbacks();
-        callbacks.onNext = () -> {
+        callbacks.onPlay = () -> {
             flag = true;
             System.out.println("next");
+            control.setPlayingState(MediaTransportControlsPlayingState.PLAYING);
+        };
+        callbacks.onPause = () -> {
+            control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
         };
         control.setEnabledButtons(new MediaTransportControlsEnabledButtons(
                 true,
                 true,
                 true,
                 true,
-                false
+                true
                 ));
         control.setCallbacks(callbacks);
         control.setEnabled(true);
         control.setMediaType(MediaTransportControlsMediaType.Music);
+        control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
         control.setMediaProperties(new MediaTransportControlsMusicProperties(
                 "TestTitle",
                 "TestArtist",
-                "",
-                "",
+                "test",
+                "tset",
                 new String[]{},
                 0,
-                0
+                1
         ));
         control.setTimelineProperties(new MediaTransportControlsTimelineProperties(
                 0L,
@@ -38,8 +43,8 @@ public class GeneralTest {
                 0L,
                 100000L
         ));
-        control.updateDisplay();
         control.setPlayingState(MediaTransportControlsPlayingState.PLAYING);
+        control.updateDisplay();
         for (Long l = 0L; l < 100000L;l+=1000L){
             control.setPosition(l);
             System.out.println(l);

@@ -6,4 +6,6 @@ public class MediaTransportControlsCallbacks{
     public MediaTransportControlsButtonCallback onStop;
     public MediaTransportControlsButtonCallback onNext;
     public MediaTransportControlsButtonCallback onPrevious;
+    public MediaTransportControlsSeekCallback onSeek;
+
 }

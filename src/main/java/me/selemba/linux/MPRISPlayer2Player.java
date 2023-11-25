@@ -10,10 +10,11 @@ import org.freedesktop.dbus.interfaces.DBusInterface;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @DBusInterfaceName("org.mpris.MediaPlayer2.Player")
-@DBusProperty(name = "Metadata", type = MPRISPlayer2Player.PropertyMetadataType.class, access = Access.READ)
+@DBusProperty(name = "Metadata", type = Map.class, access = Access.READ)
 @DBusProperty(name = "PlaybackStatus", type = String.class, access = Access.READ)
 @DBusProperty(name = "LoopStatus", type = String.class, access = Access.READ_WRITE)
 @DBusProperty(name = "Volume", type = Double.class, access = Access.READ_WRITE)
@@ -46,10 +47,6 @@ public interface MPRISPlayer2Player extends DBusInterface {
 
     void SetPosition(DBusPath _arg0, long _arg1);
 
-    interface PropertyMetadataType extends TypeRef<Map<String, Variant<?>>> {
-
-    }
-
     class Seeked extends DBusSignal {
         private final long timeInUs;
 
@@ -60,6 +57,61 @@ public interface MPRISPlayer2Player extends DBusInterface {
 
         public long getTimeInUs() {
             return timeInUs;
+        }
+
+    }
+
+    enum PlaybackStatus{
+        Playing("Playing"),
+        Stopped("Stopped"),
+        Paused("Paused");
+        public final String value;
+        PlaybackStatus(String value){
+            this.value = value;
+        }
+    }
+
+    enum LoopStatus{
+        None("None"),
+        Track("Track"),
+        Playlist("Playlist");
+        public final String value;
+        LoopStatus(String value){
+            this.value = value;
+        }
+    }
+
+    class Metadata{
+        public String MPRIS_TrackId = "/me/selemba/free-danza/1";
+        public Long MPRIS_Length = 0L;
+        public String MPRIS_ArtUrl = "";
+        public String XESAM_Album = "";
+        public String[] XESAM_AlbumArtist = {};
+        public String[] XESAM_Artist = {};
+        public String XESAM_Title = "";
+        public Integer XESAM_TrackNumber = 0;
+
+        public Map<String,Variant<?>> toMap(){
+            HashMap<String,Variant<?>> map = new HashMap<>(
+                    Map.of(
+                            "mpris:trackid", new Variant<>(this.MPRIS_TrackId),
+                            "mpris:length", new Variant<Long>(this.MPRIS_Length),
+                            "xesam:album", new Variant<>(this.XESAM_Album),
+                            "xesam:albumArtist", new Variant<>(this.XESAM_AlbumArtist),
+                            "xesam:artist", new Variant<>(this.XESAM_Artist),
+                            "xesam:title", new Variant<>(this.XESAM_Title),
+                            "xesam:trackNumber", new Variant<>(this.XESAM_TrackNumber)
+                    )
+            );
+            if(!this.MPRIS_ArtUrl.isEmpty()){
+                map.put("mpris:artUrl", new Variant<>(this.MPRIS_ArtUrl));
+            }
+            return map;
+        }
+
+        public HashMap<String,Variant<?>> toMutableMap(){
+            HashMap<String, Variant<?>> map = new HashMap<>(this.toMap());
+            return map;
         }
 
     }
