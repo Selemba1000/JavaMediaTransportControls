@@ -112,6 +112,23 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         CanGoPrevious.setValue(enabledButtons.isPreviousEnabled);
     }
 
+    @Override
+    public MediaTransportControlsParameters getParameters(){
+        return new MediaTransportControlsParameters(
+                properties.LoopStatus.toOuter(),
+                properties.Volume,
+                properties.Rate,
+                properties.Shuffle
+        );
+    }
+
+    public void setParameters(MediaTransportControlsParameters parameters){
+        properties.LoopStatus = parameters.loopStatus.toInner();
+        properties.Volume = parameters.volume;
+        properties.Rate = parameters.rate;
+        properties.Shuffle = parameters.shuffle;
+    }
+
     protected MediaTransportControlsCallbacks callbacks;
 
     @Override
@@ -130,9 +147,7 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
     }
 
     @Override
-    public void updateDisplay() {
-
-    }
+    public void updateDisplay() {}
 
     @Override
     public void resetDisplay() {
@@ -145,9 +160,7 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
     }
 
     @Override
-    public void setMediaType(MediaTransportControlsMediaType mediaType) {
-
-    }
+    public void setMediaType(MediaTransportControlsMediaType mediaType) {}
 
     @Override
     public MediaTransportControlsMediaProperties getMediaProperties() {
@@ -178,7 +191,7 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
 
     @Override
     public void Raise() {
-        System.out.println("raise");
+
     }
 
     @Override
@@ -248,11 +261,12 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <A> A Get(String _interfaceName, String _propertyName) {
         A ret = null;
         try {
-            ret = (A)((DBusPropertyInterface)this.getClass().getDeclaredField(_propertyName).get(this)).getVariantMap().get(_propertyName);
+            ret = (A) ((DBusPropertyInterface)this.getClass().getDeclaredField(_propertyName).get(this)).getVariantMap().get(_propertyName);
         } catch (Exception e){
             //TODO logging
         }
@@ -264,20 +278,20 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
     public <A> void Set(String _interfaceName, String _propertyName, A _value) {
         switch (_propertyName){
             case "LoopStatus":
-                //properties.LoopStatus = LoopStatus.valueOf((String) _value);
-                updateDisplay();
+                //properties.LoopStatus = MPRISPlayer2Player.LoopStatus.valueOf((String) _value);
+                callbacks.onLoop.callback(MPRISPlayer2Player.LoopStatus.valueOf( (String)_value).toOuter() );
                 break;
             case "Rate":
-                properties.Rate = (Double) _value;
-                updateDisplay();
+                //properties.Rate = (Double) _value;
+                callbacks.onRate.callback((Double) _value);
                 break;
             case "Shuffle":
-                properties.Shuffle = (boolean) _value;
-                updateDisplay();
+                //properties.Shuffle = (boolean) _value;
+                callbacks.onShuffle.callback((Boolean) _value);
                 break;
             case "Volume":
-                properties.Volume = (Double) _value;
-                updateDisplay();
+                //properties.Volume = (Double) _value;
+                callbacks.onVolume.callback((Double) _value);
                 break;
         }
     }

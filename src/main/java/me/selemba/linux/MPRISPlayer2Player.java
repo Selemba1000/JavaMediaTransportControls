@@ -1,5 +1,6 @@
 package me.selemba.linux;
 
+import me.selemba.MediaTransportControlsParameters;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;
@@ -87,6 +88,18 @@ public interface MPRISPlayer2Player extends DBusInterface {
         public final String value;
         LoopStatus(String value){
             this.value = value;
+        }
+
+        MediaTransportControlsParameters.LoopStatus toOuter(){
+            switch (this){
+                case None:
+                    return MediaTransportControlsParameters.LoopStatus.None;
+                case Track:
+                    return MediaTransportControlsParameters.LoopStatus.Track;
+                case Playlist:
+                    return MediaTransportControlsParameters.LoopStatus.Playlist;
+            }
+            throw new IllegalStateException();
         }
     }
 

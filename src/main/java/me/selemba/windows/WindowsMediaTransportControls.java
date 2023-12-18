@@ -81,12 +81,23 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
+    public MediaTransportControlsParameters getParameters(){
+        return new MediaTransportControlsParameters(MediaTransportControlsParameters.LoopStatus.None,1.0,1.0,false);
+    }
+
+    @Override
+    public void setParameters(MediaTransportControlsParameters parameters){
+        //TODO Windows parameters
+    }
+
+    @Override
     public void setCallbacks(MediaTransportControlsCallbacks callbacks) {
         lib.setOnPlay(new ButtonPressedCallback(callbacks.onPlay));
         lib.setOnPause(new ButtonPressedCallback(callbacks.onPause));
         lib.setOnStop(new ButtonPressedCallback(callbacks.onStop));
         lib.setOnNext(new ButtonPressedCallback(callbacks.onNext));
         lib.setOnPrevious(new ButtonPressedCallback(callbacks.onPrevious));
+        lib.setOnSeek(new SeekCallback (callbacks.onSeek));
     }
 
     @Override
