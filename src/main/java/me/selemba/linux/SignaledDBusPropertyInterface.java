@@ -6,5 +6,5 @@ public interface SignaledDBusPropertyInterface extends DBusPropertyInterface {
 
     void signal();
 
-    public void ProvideConnection(DBusConnection connection);
+    void ProvideConnection(DBusConnection connection);
 }

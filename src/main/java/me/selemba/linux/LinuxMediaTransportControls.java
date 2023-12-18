@@ -12,10 +12,10 @@ import java.util.*;
 
 public class LinuxMediaTransportControls extends MediaTransportControls implements MPRISPlayer2, MPRISPlayer2Player, Properties {
 
-    private static String generalInterface = "org.mpris.MediaPlayer2";
-    private static String playerInterface = "org.mpris.MediaPlayer2.Player";
+    private static final String generalInterface = "org.mpris.MediaPlayer2";
+    private static final String playerInterface = "org.mpris.MediaPlayer2.Player";
 
-    public PlayerProperties properties;
+    public final PlayerProperties properties;
 
     public DBusConnection connection;
 
@@ -31,7 +31,7 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        HashMap<String,Variant<?>> map = new HashMap();
+        HashMap<String,Variant<?>> map = new HashMap<>();
 
         for (Field field : fields){
             if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)){
@@ -40,16 +40,16 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
                     ((SignaledDBusPropertyInterface) field.get(this)).signal();
                     map.putAll(((SignaledDBusPropertyInterface) field.get(this)).getVariantMap());
                 }catch (Exception e){
-
+                    //TODO logging
                 }
             }
         }
 
         try {
-            PropertiesChanged msg = new PropertiesChanged(getObjectPath(), playerInterface, map, Arrays.asList(Arrays.toString(map.keySet().toArray())));
+            PropertiesChanged msg = new PropertiesChanged(getObjectPath(), playerInterface, map, List.of(Arrays.toString(map.keySet().toArray())));
             //connection.sendMessage(msg);
         }catch (Exception e){
-
+            //TODO logging
         }
 
     }
@@ -254,9 +254,10 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         try {
             ret = (A)((DBusPropertyInterface)this.getClass().getDeclaredField(_propertyName).get(this)).getVariantMap().get(_propertyName);
         } catch (Exception e){
+            //TODO logging
         }
         System.out.println(ret);
-        return (A)ret;
+        return ret;
     }
 
     @Override
@@ -291,33 +292,57 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         return "/org/mpris/MediaPlayer2";
     }
 
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanQuit = new SignaledDBusProperty<>(false,"CanQuit",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> Fullscreen = new SignaledDBusProperty<>(false,"Fullscreen",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanSetFullscreen = new SignaledDBusProperty<>(false,"CanSetFullscreen",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanRaise = new SignaledDBusProperty<>(false,"CanRaise",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> HasTrackList = new SignaledDBusProperty<>(false,"HasTrackList",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String> Identity = new SignaledDBusProperty<>("free-danza","Identity",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String> DesktopEntry = new SignaledDBusProperty<>("brave-browser","DesktopEntry",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String[]> SupportedUriSchemes = new SignaledDBusProperty<>(new String[]{"danza"},"SupportedUriSchemes",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String[]> SupportedMimeTypes = new SignaledDBusProperty<>(new String[]{},"SupportedMimeTypes",getObjectPath(),generalInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String> PlaybackStatus = new SignaledDBusProperty<>("Stopped","PlaybackStatus",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<String> LoopStatus = new SignaledDBusProperty<>("None","LoopStatus",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Double> Rate = new SignaledDBusProperty<>(1.0,"Rate",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> Shuffle = new SignaledDBusProperty<>(false,"Shuffle",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusPropertyMap<Object> Metadata = new SignaledDBusPropertyMap<>("Metadata",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Double> Volume = new SignaledDBusProperty<>(1.0,"Volume",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     DBusProperty<Long> Position = new DBusProperty<>(0L,"Position");
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Double> MaximumRate = new SignaledDBusProperty<>(1.0,"MaximumRate",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Double> MinimumRate = new SignaledDBusProperty<>(1.0,"MinimumRate",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanGoNext = new SignaledDBusProperty<>(false,"CanGoNext",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanGoPrevious = new SignaledDBusProperty<>(false,"CanGoPrevious",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanPlay = new SignaledDBusProperty<>(true,"CanPlay",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanPause = new SignaledDBusProperty<>(true,"CanPause",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     SignaledDBusProperty<Boolean> CanSeek = new SignaledDBusProperty<>(true,"CanSeek",getObjectPath(),playerInterface);
+    @SuppressWarnings("unused")
     DBusProperty<Boolean> CanControl = new DBusProperty<>(true,"CanControl");
 
 
-    class PlayerProperties{
+    public static class PlayerProperties{
         boolean Fullscreen = false;
         boolean CanSetFullscreen = false;
         boolean CanRaise = false;
@@ -365,7 +390,7 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
             map.put("LoopStatus", new Variant<>(this.LoopStatus));
             map.put("Rate", new Variant<>(this.Rate));
             map.put("Shuffle", new Variant<>(this.Shuffle));
-            map.put("Metadata", new Variant<Map<String,Variant<?>>>(this.Metadata.toMap(),"a{sv}"));
+            map.put("Metadata", new Variant<>(this.Metadata.toMap(), "a{sv}"));
             map.put("Volume", new Variant<>(this.Volume));
             map.put("Position", new Variant<>(this.Position));
             map.put("MinimumRate", new Variant<>(this.MinimumRate));

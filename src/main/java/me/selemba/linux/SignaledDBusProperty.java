@@ -8,8 +8,8 @@ import java.util.List;
 
 public class SignaledDBusProperty<T> extends DBusProperty<T> implements SignaledDBusPropertyInterface {
 
-    private String objectPath;
-    private String interfaceName;
+    private final String objectPath;
+    private final String interfaceName;
     private DBusConnection connection;
 
     @Override
@@ -35,7 +35,7 @@ public class SignaledDBusProperty<T> extends DBusProperty<T> implements Signaled
             Properties.PropertiesChanged msg = new Properties.PropertiesChanged(objectPath, interfaceName, this.getVariantMap(), List.of());
             connection.sendMessage(msg);
         }catch (DBusException e){
-            e.printStackTrace();
+            //TODO logging
         }
     }
 

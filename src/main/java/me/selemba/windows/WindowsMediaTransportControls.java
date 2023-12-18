@@ -5,7 +5,6 @@ import com.sun.jna.WString;
 import me.selemba.*;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class WindowsMediaTransportControls extends MediaTransportControls {
 
@@ -110,10 +109,12 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
         lib.reset();
     }
 
+    @SuppressWarnings({"SwitchStatementWithTooFewBranches"})
     @Override
     public MediaTransportControlsMediaType getMediaType() {
         int res = lib.getMediaType();
         switch (res){
+            //TODO MediaTypes
             case 0:
                 return MediaTransportControlsMediaType.Music;
             default:
@@ -121,9 +122,11 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
         }
     }
 
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public void setMediaType(MediaTransportControlsMediaType mediaType) {
         switch (mediaType){
+            //TODO MediaTypes
             case Music:
                 lib.setMediaType(0);
         }

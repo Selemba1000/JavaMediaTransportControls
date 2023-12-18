@@ -21,13 +21,16 @@ public abstract class MediaTransportControls {
         return INSTANCE;
     }
 
+    @SuppressWarnings("unused")
     public abstract MediaTransportControlsPlayingState getPlayingState();
 
     public abstract void setPlayingState(MediaTransportControlsPlayingState state);
 
+    @SuppressWarnings("unused")
     public abstract boolean getEnabled();
     public abstract void setEnabled(boolean enabled);
 
+    @SuppressWarnings("unused")
     public abstract MediaTransportControlsEnabledButtons getEnabledButtons();
     public abstract void setEnabledButtons(MediaTransportControlsEnabledButtons enabledButtons);
 
@@ -37,11 +40,14 @@ public abstract class MediaTransportControls {
     public abstract void setPosition(Long position);
 
     public abstract void updateDisplay();
+    @SuppressWarnings("unused")
     public abstract void resetDisplay();
 
+    @SuppressWarnings("unused")
     public abstract MediaTransportControlsMediaType getMediaType();
     public abstract void setMediaType(MediaTransportControlsMediaType mediaType);
 
+    @SuppressWarnings("unused")
     public abstract MediaTransportControlsMediaProperties getMediaProperties();
     public abstract void setMediaProperties(MediaTransportControlsMediaProperties mediaProperties);
 

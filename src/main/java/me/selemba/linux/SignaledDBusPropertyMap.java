@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusPropertyInterface {
-    private HashMap<String,V> field = new HashMap<>();
+    private final HashMap<String,V> field = new HashMap<>();
 
-    private String fieldName;
-    private String objectPath;
-    private String interfaceName;
+    private final String fieldName;
+    private final String objectPath;
+    private  final String interfaceName;
     private DBusConnection connection;
 
     @Override
@@ -72,7 +72,7 @@ public class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface
             Properties.PropertiesChanged msg = new Properties.PropertiesChanged(objectPath, interfaceName, this.getVariantMap(), List.of());
             connection.sendMessage(msg);
         }catch (DBusException e){
-            e.printStackTrace();
+            //TODO logging
         }
     }
 

@@ -7,16 +7,14 @@ public class GeneralTest {
 
     @Test
     void test() throws InterruptedException {
-        MediaTransportControls control = MediaTransportControls.getInstance("free-danza");
+        MediaTransportControls control = MediaTransportControls.getInstance(new MediaTransportControlsSettings("test-application","test-application"));
         MediaTransportControlsCallbacks callbacks = new MediaTransportControlsCallbacks();
         callbacks.onPlay = () -> {
             flag = true;
             System.out.println("next");
             control.setPlayingState(MediaTransportControlsPlayingState.PLAYING);
         };
-        callbacks.onPause = () -> {
-            control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
-        };
+        callbacks.onPause = () -> control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
         control.setEnabledButtons(new MediaTransportControlsEnabledButtons(
                 true,
                 true,

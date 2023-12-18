@@ -2,10 +2,10 @@ package me.selemba;
 
 public class MediaTransportControlsTimelineProperties {
 
-    public Long start;
-    public Long end;
-    public Long seekStart;
-    public Long seekEnd;
+    public final Long start;
+    public final Long end;
+    public final Long seekStart;
+    public final Long seekEnd;
 
     public MediaTransportControlsTimelineProperties(Long start, Long end, Long seekStart, Long seekEnd) {
         this.start = start;

@@ -1,7 +1,6 @@
 package me.selemba.linux;
 
 import org.freedesktop.dbus.DBusPath;
-import org.freedesktop.dbus.TypeRef;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;
 import org.freedesktop.dbus.annotations.DBusProperty.Access;
@@ -16,13 +15,13 @@ import java.util.Map;
 @DBusInterfaceName("org.mpris.MediaPlayer2.Player")
 @DBusProperty(name = "Metadata", type = Map.class, access = Access.READ)
 @DBusProperty(name = "PlaybackStatus", type = String.class, access = Access.READ)
-@DBusProperty(name = "LoopStatus", type = String.class, access = Access.READ_WRITE)
-@DBusProperty(name = "Volume", type = Double.class, access = Access.READ_WRITE)
-@DBusProperty(name = "Shuffle", type = Double.class, access = Access.READ_WRITE)
+@DBusProperty(name = "LoopStatus", type = String.class)
+@DBusProperty(name = "Volume", type = Double.class)
+@DBusProperty(name = "Shuffle", type = Double.class)
 @DBusProperty(name = "Position", type = Integer.class, access = Access.READ)
-@DBusProperty(name = "Rate", type = Double.class, access = Access.READ_WRITE)
-@DBusProperty(name = "MinimumRate", type = Double.class, access = Access.READ_WRITE)
-@DBusProperty(name = "MaximumRate", type = Double.class, access = Access.READ_WRITE)
+@DBusProperty(name = "Rate", type = Double.class)
+@DBusProperty(name = "MinimumRate", type = Double.class)
+@DBusProperty(name = "MaximumRate", type = Double.class)
 @DBusProperty(name = "CanControl", type = Boolean.class, access = Access.READ)
 @DBusProperty(name = "CanPlay", type = Boolean.class, access = Access.READ)
 @DBusProperty(name = "CanPause", type = Boolean.class, access = Access.READ)
@@ -95,7 +94,7 @@ public interface MPRISPlayer2Player extends DBusInterface {
             HashMap<String,Variant<?>> map = new HashMap<>(
                     Map.of(
                             "mpris:trackid", new Variant<>(this.MPRIS_TrackId),
-                            "mpris:length", new Variant<Long>(this.MPRIS_Length),
+                            "mpris:length", new Variant<>(this.MPRIS_Length),
                             "xesam:album", new Variant<>(this.XESAM_Album),
                             "xesam:albumArtist", new Variant<>(this.XESAM_AlbumArtist),
                             "xesam:artist", new Variant<>(this.XESAM_Artist),
@@ -110,8 +109,7 @@ public interface MPRISPlayer2Player extends DBusInterface {
         }
 
         public HashMap<String,Variant<?>> toMutableMap(){
-            HashMap<String, Variant<?>> map = new HashMap<>(this.toMap());
-            return map;
+            return new HashMap<>(this.toMap());
         }
 
     }

@@ -1,5 +1,6 @@
 package me.selemba;
 
+@SuppressWarnings("CanBeFinal")
 public class MediaTransportControlsEnabledButtons {
 
     public boolean isPlayEnabled;

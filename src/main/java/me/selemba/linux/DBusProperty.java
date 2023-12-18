@@ -1,13 +1,12 @@
 package me.selemba.linux;
 
-import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.types.Variant;
 
 import java.util.Map;
 
 public class DBusProperty<T> implements DBusPropertyInterface {
 
-    private String fieldName;
+    private final String fieldName;
 
     DBusProperty(T field, String fieldName){
         this.field=field;
