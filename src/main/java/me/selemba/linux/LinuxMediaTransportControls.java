@@ -19,8 +19,8 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
 
     public DBusConnection connection;
 
-    public LinuxMediaTransportControls(String playerName) {
-        properties = new PlayerProperties(playerName);
+    public LinuxMediaTransportControls(String playerName, String desktopFile) {
+        properties = new PlayerProperties(playerName, desktopFile);
         try {
             connection = DBusConnectionBuilder.forSessionBus().build();
             connection.requestBusName("org.mpris.MediaPlayer2."+playerName);
@@ -323,8 +323,8 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         boolean CanRaise = false;
         boolean HasTrackList = false;
         String Identity;
-        String DesktopEntry = "";
-        String[] SupportedUriSchemes = {"file"};
+        String DesktopEntry;
+        String[] SupportedUriSchemes = {""};
         String[] SupportedMimeTypes = {""};
 
         //Player Interface
@@ -345,8 +345,9 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
         boolean CanSeek = true;
         boolean CanControl = true;
 
-        public PlayerProperties(String identity) {
+        public PlayerProperties(String identity, String desktopEntry) {
             Identity = identity;
+            DesktopEntry = desktopEntry;
         }
 
         public Map<String, Variant<?>> toMap(){

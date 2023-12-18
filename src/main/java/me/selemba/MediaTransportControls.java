@@ -7,15 +7,15 @@ public abstract class MediaTransportControls {
 
     protected static MediaTransportControls INSTANCE;
 
-    protected MediaTransportControls(){};
+    protected MediaTransportControls(){}
 
-    public static synchronized MediaTransportControls getInstance(String playerName){
+    public static synchronized MediaTransportControls getInstance(MediaTransportControlsSettings settings){
         if (INSTANCE==null){
             String os = System.getProperty("os.name");
             if(os.toLowerCase().contains("win")){
                 INSTANCE = new WindowsMediaTransportControls();
             }else if(os.toLowerCase().contains("nux")){
-                INSTANCE = new LinuxMediaTransportControls(playerName);
+                INSTANCE = new LinuxMediaTransportControls(settings.playerName, settings.desktopFile);
             }
         }
         return INSTANCE;

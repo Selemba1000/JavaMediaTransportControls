@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'me.selemba'
@@ -17,6 +18,23 @@ dependencies {
     implementation 'com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:4.3.1'
 }
 
+java {
+    targetCompatibility = 8
+    sourceCompatibility = 8
+}
+
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'me.selemba'
+            artifactId = 'JavaMediaTransportControls'
+            version = '1.0.0'
+
+            from components.java
+        }
+    }
 }
