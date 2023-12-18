@@ -153,7 +153,8 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
                 lib.getMusicAlbumArtist().toString(),
                 genres,
                 lib.getMusicAlbumTrackCount().intValue(),
-                lib.getMusicTrack().intValue()
+                lib.getMusicTrack().intValue(),
+                null
         );
     }
 
@@ -171,6 +172,9 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
             for (String genre: mediaPropertiesCast.genres
                  ) {
                 lib.addMusicGenre(new WString(genre));
+            }
+            if(((MediaTransportControlsMusicProperties) mediaProperties).art!=null) {
+                lib.setThumbnail(new WString( ((MediaTransportControlsMusicProperties) mediaProperties).art.toURI().toString()));
             }
         }
     }

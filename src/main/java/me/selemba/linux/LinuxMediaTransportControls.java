@@ -44,14 +44,6 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
                 }
             }
         }
-
-        try {
-            PropertiesChanged msg = new PropertiesChanged(getObjectPath(), playerInterface, map, List.of(Arrays.toString(map.keySet().toArray())));
-            //connection.sendMessage(msg);
-        }catch (Exception e){
-            //TODO logging
-        }
-
     }
 
     @Override
@@ -171,7 +163,8 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
                 Arrays.toString((String[])Metadata.getAt("xesam:albumArtist")),
                 new String[]{},
                 0,
-                (Integer) Metadata.getAt("xesam:trackNumber")
+                (Integer) Metadata.getAt("xesam:trackNumber"),
+                null
         );
     }
 
@@ -186,6 +179,12 @@ public class LinuxMediaTransportControls extends MediaTransportControls implemen
                     "xesam:trackNumber",((MediaTransportControlsMusicProperties) mediaProperties).track,
                     "mpris:trackid","/me/selemba/std"
             ));
+            if(((MediaTransportControlsMusicProperties) mediaProperties).art!=null){
+                System.out.println(((MediaTransportControlsMusicProperties) mediaProperties).art.toURI().toString());
+                Metadata.setAt(
+                        "mpris:artUrl",((MediaTransportControlsMusicProperties) mediaProperties).art.toURI().toString()
+                );
+            }
         }
     }
 

@@ -42,6 +42,7 @@ public abstract class MediaTransportControls {
     @SuppressWarnings("unused")
     public abstract MediaTransportControlsParameters getParameters();
 
+    @SuppressWarnings("unused")
     public abstract void setParameters(MediaTransportControlsParameters parameters);
 
     public abstract void setTimelineProperties(MediaTransportControlsTimelineProperties timelineProperties);

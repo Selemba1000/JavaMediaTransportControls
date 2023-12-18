@@ -1,6 +1,8 @@
 import me.selemba.*;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public class GeneralTest {
 
     boolean flag = false;
@@ -33,7 +35,8 @@ public class GeneralTest {
                 "tset",
                 new String[]{},
                 0,
-                1
+                1,
+                new File(System.getProperty("user.home")+"/Downloads/no_cover.jpeg")
         ));
         control.setTimelineProperties(new MediaTransportControlsTimelineProperties(
                 0L,

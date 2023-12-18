@@ -1,5 +1,7 @@
 package me.selemba;
 
+import java.io.File;
+
 public class MediaTransportControlsMusicProperties extends MediaTransportControlsMediaProperties {
 
     public String title;
@@ -9,11 +11,13 @@ public class MediaTransportControlsMusicProperties extends MediaTransportControl
 
     public String[] genres;
 
+    public File art;
+
     public int albumTracks;
 
     public int track;
 
-    public MediaTransportControlsMusicProperties(String title, String artist, String albumTitle, String albumArtist, String[] genres, int albumTracks, int track) {
+    public MediaTransportControlsMusicProperties(String title, String artist, String albumTitle, String albumArtist, String[] genres, int albumTracks, int track, File art) {
         this.title = title;
         this.artist = artist;
         this.albumTitle = albumTitle;
@@ -21,5 +25,6 @@ public class MediaTransportControlsMusicProperties extends MediaTransportControl
         this.genres = genres;
         this.albumTracks = albumTracks;
         this.track = track;
+        this.art = art;
     }
 }

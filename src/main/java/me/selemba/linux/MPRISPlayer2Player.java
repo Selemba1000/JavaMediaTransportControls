@@ -104,7 +104,7 @@ public interface MPRISPlayer2Player extends DBusInterface {
     }
 
     class Metadata{
-        public String MPRIS_TrackId = "/me/selemba/free-danza/1";
+        public String MPRIS_TrackId = "/me/selemba/null";
         public Long MPRIS_Length = 0L;
         public String MPRIS_ArtUrl = "";
         public String XESAM_Album = "";
