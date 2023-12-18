@@ -42,6 +42,7 @@ public class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface
         signal();
     }
 
+    @SuppressWarnings("unused")
     public void removeAt(String index){
         field.remove(index);
         signal();

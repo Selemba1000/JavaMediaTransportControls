@@ -5,7 +5,7 @@ import me.selemba.MediaTransportControlsButtonCallback;
 
 public class ButtonPressedCallback implements Callback {
 
-    private MediaTransportControlsButtonCallback callbackDel;
+    private final MediaTransportControlsButtonCallback callbackDel;
 
     protected ButtonPressedCallback(MediaTransportControlsButtonCallback callback) {
         this.callbackDel = callback;

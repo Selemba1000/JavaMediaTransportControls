@@ -28,24 +28,34 @@ import java.util.Map;
 @DBusProperty(name = "CanSeek", type = Boolean.class, access = Access.READ)
 public interface MPRISPlayer2Player extends DBusInterface {
 
+    @SuppressWarnings("unused")
     void Previous();
 
+    @SuppressWarnings("unused")
     void Next();
 
+    @SuppressWarnings("unused")
     void Stop();
 
+    @SuppressWarnings("unused")
     void Play();
 
+    @SuppressWarnings("unused")
     void Pause();
 
+    @SuppressWarnings("unused")
     void PlayPause();
 
+    @SuppressWarnings("unused")
     void Seek(long _arg0);
 
+    @SuppressWarnings("unused")
     void OpenUri(String _arg0);
 
+    @SuppressWarnings("unused")
     void SetPosition(DBusPath _arg0, long _arg1);
 
+    @SuppressWarnings("unused")
     class Seeked extends DBusSignal {
         private final long timeInUs;
 
