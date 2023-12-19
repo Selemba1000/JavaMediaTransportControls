@@ -1,4 +1,4 @@
-package me.selemba.linux;
+package io.github.selemba1000.linux;
 
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;

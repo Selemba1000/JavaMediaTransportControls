@@ -1,6 +1,6 @@
-package me.selemba.linux;
+package io.github.selemba1000.linux;
 
-import me.selemba.JMTCParameters;
+import io.github.selemba1000.JMTCParameters;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;

@@ -1,6 +1,6 @@
-package me.selemba.linux;
+package io.github.selemba1000.linux;
 
-import me.selemba.*;
+import io.github.selemba1000.*;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
@@ -155,7 +155,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     @Override
     public JMTCParameters getParameters() {
         return new JMTCParameters(
-                me.selemba.linux.MPRISPlayer2Player.LoopStatus.valueOf(LoopStatus.getValue()).toOuter(),
+                MPRISPlayer2Player.LoopStatus.valueOf(LoopStatus.getValue()).toOuter(),
                 Volume.getValue(),
                 Rate.getValue(),
                 Shuffle.getValue()
@@ -225,7 +225,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
                     "xesam:album", ((JMTCMusicProperties) mediaProperties).albumTitle,
                     "xesam:albumArtist", ((JMTCMusicProperties) mediaProperties).albumArtist.split(","),
                     "xesam:trackNumber", ((JMTCMusicProperties) mediaProperties).track,
-                    "mpris:trackid", "/me/selemba/std"
+                    "mpris:trackid", "/io/github/selemba1000/std"
             ));
             if (((JMTCMusicProperties) mediaProperties).art != null) {
                 Metadata.setAt(

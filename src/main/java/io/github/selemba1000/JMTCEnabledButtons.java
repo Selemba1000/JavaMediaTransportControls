@@ -1,4 +1,4 @@
-package me.selemba;
+package io.github.selemba1000;
 
 @SuppressWarnings("CanBeFinal")
 public class JMTCEnabledButtons {

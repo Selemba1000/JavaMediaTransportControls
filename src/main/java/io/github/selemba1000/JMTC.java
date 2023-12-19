@@ -1,7 +1,7 @@
-package me.selemba;
+package io.github.selemba1000;
 
-import me.selemba.linux.LinuxJMTC;
-import me.selemba.windows.WindowsJMTC;
+import io.github.selemba1000.linux.LinuxJMTC;
+import io.github.selemba1000.windows.WindowsJMTC;
 
 public abstract class JMTC {
 

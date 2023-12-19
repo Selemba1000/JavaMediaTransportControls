@@ -1,7 +1,7 @@
-package me.selemba.windows;
+package io.github.selemba1000.windows;
 
 import com.sun.jna.Callback;
-import me.selemba.JMTCButtonCallback;
+import io.github.selemba1000.JMTCButtonCallback;
 
 class ButtonPressedCallback implements Callback {
 

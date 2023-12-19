@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'me.selemba'
-version = '1.0-SNAPSHOT'
+group = 'io.github.selemba1000'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
@@ -30,9 +30,9 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'me.selemba'
+            groupId = group//'io.github.selemba1000'
             artifactId = 'JavaMediaTransportControls'
-            version = '1.0.0'
+            version = version//'1.0.0'
 
             from components.java
         }

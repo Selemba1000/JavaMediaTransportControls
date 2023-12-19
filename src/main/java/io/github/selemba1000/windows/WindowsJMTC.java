@@ -1,8 +1,8 @@
-package me.selemba.windows;
+package io.github.selemba1000.windows;
 
 import com.sun.jna.Native;
 import com.sun.jna.WString;
-import me.selemba.*;
+import io.github.selemba1000.*;
 
 import java.util.Arrays;
 
