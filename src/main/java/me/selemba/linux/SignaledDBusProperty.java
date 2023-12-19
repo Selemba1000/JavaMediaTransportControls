@@ -6,7 +6,7 @@ import org.freedesktop.dbus.interfaces.Properties;
 
 import java.util.List;
 
-public class SignaledDBusProperty<T> extends DBusProperty<T> implements SignaledDBusPropertyInterface {
+class SignaledDBusProperty<T> extends DBusProperty<T> implements SignaledDBusPropertyInterface {
 
     private final String objectPath;
     private final String interfaceName;

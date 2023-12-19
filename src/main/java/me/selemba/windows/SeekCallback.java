@@ -1,13 +1,13 @@
 package me.selemba.windows;
 
 import com.sun.jna.Callback;
-import me.selemba.MediaTransportControlsSeekCallback;
+import me.selemba.JMTCSeekCallback;
 
-public class SeekCallback implements Callback {
+class SeekCallback implements Callback {
 
-    private final MediaTransportControlsSeekCallback callbackDel;
+    private final JMTCSeekCallback callbackDel;
 
-    protected SeekCallback(MediaTransportControlsSeekCallback callback){this.callbackDel = callback;}
+    protected SeekCallback(JMTCSeekCallback callback){this.callbackDel = callback;}
 
     void callback(Long position){
         if(callbackDel!=null){

@@ -6,36 +6,36 @@ import me.selemba.*;
 
 import java.util.Arrays;
 
-public class WindowsMediaTransportControls extends MediaTransportControls {
+public class WindowsJMTC extends JMTC {
 
     private final SMTCAdapter lib = Native.load("SMTCAdapter", SMTCAdapter.class);
 
-    public WindowsMediaTransportControls(){
+    public WindowsJMTC(){
         super();
         lib.init();
     }
 
     @Override
-    public MediaTransportControlsPlayingState getPlayingState(){
+    public JMTCPlayingState getPlayingState(){
         int res = lib.getPlaybackState();
         switch (res){
             case 0:
-                return MediaTransportControlsPlayingState.CLOSED;
+                return JMTCPlayingState.CLOSED;
             case 1:
-                return MediaTransportControlsPlayingState.PAUSED;
+                return JMTCPlayingState.PAUSED;
             case 2:
-                return MediaTransportControlsPlayingState.STOPPED;
+                return JMTCPlayingState.STOPPED;
             case 3:
-                return MediaTransportControlsPlayingState.PLAYING;
+                return JMTCPlayingState.PLAYING;
             case 4:
-                return MediaTransportControlsPlayingState.CHANGING;
+                return JMTCPlayingState.CHANGING;
             default:
                 throw new IllegalStateException();
         }
     }
 
     @Override
-    public void setPlayingState(MediaTransportControlsPlayingState state){
+    public void setPlayingState(JMTCPlayingState state){
         switch (state){
             case CLOSED:
                 lib.setPlaybackState(0);
@@ -61,8 +61,8 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public MediaTransportControlsEnabledButtons getEnabledButtons() {
-        return new MediaTransportControlsEnabledButtons(
+    public JMTCEnabledButtons getEnabledButtons() {
+        return new JMTCEnabledButtons(
                 lib.getPlayEnabled(),
                 lib.getPauseEnabled(),
                 lib.getStopEnabled(),
@@ -72,7 +72,7 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public void setEnabledButtons(MediaTransportControlsEnabledButtons enabledButtons) {
+    public void setEnabledButtons(JMTCEnabledButtons enabledButtons) {
         lib.setPlayEnabled(enabledButtons.isPlayEnabled);
         lib.setPauseEnabled(enabledButtons.isPauseEnabled);
         lib.setStopEnabled(enabledButtons.isStopEnabled);
@@ -81,17 +81,17 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public MediaTransportControlsParameters getParameters(){
-        return new MediaTransportControlsParameters(MediaTransportControlsParameters.LoopStatus.None,1.0,1.0,false);
+    public JMTCParameters getParameters(){
+        return new JMTCParameters(JMTCParameters.LoopStatus.None,1.0,1.0,false);
     }
 
     @Override
-    public void setParameters(MediaTransportControlsParameters parameters){
+    public void setParameters(JMTCParameters parameters){
         //TODO Windows parameters
     }
 
     @Override
-    public void setCallbacks(MediaTransportControlsCallbacks callbacks) {
+    public void setCallbacks(JMTCCallbacks callbacks) {
         lib.setOnPlay(new ButtonPressedCallback(callbacks.onPlay));
         lib.setOnPause(new ButtonPressedCallback(callbacks.onPause));
         lib.setOnStop(new ButtonPressedCallback(callbacks.onStop));
@@ -101,7 +101,7 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public void setTimelineProperties(MediaTransportControlsTimelineProperties timelineProperties) {
+    public void setTimelineProperties(JMTCTimelineProperties timelineProperties) {
         lib.setTimelineProperties(timelineProperties.start, timelineProperties.end, timelineProperties.seekStart, timelineProperties.seekEnd);
     }
 
@@ -122,12 +122,12 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
 
     @SuppressWarnings({"SwitchStatementWithTooFewBranches"})
     @Override
-    public MediaTransportControlsMediaType getMediaType() {
+    public JMTCMediaType getMediaType() {
         int res = lib.getMediaType();
         switch (res){
             //TODO MediaTypes
             case 0:
-                return MediaTransportControlsMediaType.Music;
+                return JMTCMediaType.Music;
             default:
                 throw new IllegalStateException();
         }
@@ -135,7 +135,7 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
 
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
-    public void setMediaType(MediaTransportControlsMediaType mediaType) {
+    public void setMediaType(JMTCMediaType mediaType) {
         switch (mediaType){
             //TODO MediaTypes
             case Music:
@@ -144,9 +144,9 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public MediaTransportControlsMediaProperties getMediaProperties() {
+    public JMTCMediaProperties getMediaProperties() {
         String[] genres = (String[]) Arrays.stream(lib.getMusicGenres()).map(WString::toString).toArray();
-        return new MediaTransportControlsMusicProperties(
+        return new JMTCMusicProperties(
                 lib.getMusicTitle().toString(),
                 lib.getMusicArtist().toString(),
                 lib.getMusicAlbumTitle().toString(),
@@ -159,9 +159,9 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
     }
 
     @Override
-    public void setMediaProperties(MediaTransportControlsMediaProperties mediaProperties) {
-        if(mediaProperties.getClass() == MediaTransportControlsMusicProperties.class){
-            MediaTransportControlsMusicProperties mediaPropertiesCast = (MediaTransportControlsMusicProperties) mediaProperties;
+    public void setMediaProperties(JMTCMediaProperties mediaProperties) {
+        if(mediaProperties.getClass() == JMTCMusicProperties.class){
+            JMTCMusicProperties mediaPropertiesCast = (JMTCMusicProperties) mediaProperties;
             lib.setMusicTitle(new WString(mediaPropertiesCast.title));
             lib.setMusicArtist(new WString(mediaPropertiesCast.artist));
             if(! mediaPropertiesCast.albumTitle.isEmpty()) lib.setMusicAlbumTitle(new WString(mediaPropertiesCast.albumTitle));
@@ -173,8 +173,8 @@ public class WindowsMediaTransportControls extends MediaTransportControls {
                  ) {
                 lib.addMusicGenre(new WString(genre));
             }
-            if(((MediaTransportControlsMusicProperties) mediaProperties).art!=null) {
-                lib.setThumbnail(new WString( ((MediaTransportControlsMusicProperties) mediaProperties).art.toURI().toString()));
+            if(((JMTCMusicProperties) mediaProperties).art!=null) {
+                lib.setThumbnail(new WString( ((JMTCMusicProperties) mediaProperties).art.toURI().toString()));
             }
         }
     }

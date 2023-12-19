@@ -1,13 +1,13 @@
 package me.selemba.windows;
 
 import com.sun.jna.Callback;
-import me.selemba.MediaTransportControlsButtonCallback;
+import me.selemba.JMTCButtonCallback;
 
-public class ButtonPressedCallback implements Callback {
+class ButtonPressedCallback implements Callback {
 
-    private final MediaTransportControlsButtonCallback callbackDel;
+    private final JMTCButtonCallback callbackDel;
 
-    protected ButtonPressedCallback(MediaTransportControlsButtonCallback callback) {
+    protected ButtonPressedCallback(JMTCButtonCallback callback) {
         this.callbackDel = callback;
     }
 

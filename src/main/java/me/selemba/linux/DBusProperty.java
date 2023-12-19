@@ -4,7 +4,7 @@ import org.freedesktop.dbus.types.Variant;
 
 import java.util.Map;
 
-public class DBusProperty<T> implements DBusPropertyInterface {
+class DBusProperty<T> implements DBusPropertyInterface {
 
     private final String fieldName;
 
@@ -15,7 +15,7 @@ public class DBusProperty<T> implements DBusPropertyInterface {
 
     private T field;
 
-    public T getValue(){
+    protected T getValue(){
         return field;
     }
 

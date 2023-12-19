@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusPropertyInterface {
+class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusPropertyInterface {
     private final HashMap<String,V> field = new HashMap<>();
 
     private final String fieldName;
@@ -28,27 +28,27 @@ public class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface
         this.interfaceName = interfaceName;
     }
 
-    public V getAt(String index){
+    V getAt(String index){
         return field.get(index);
     }
 
-    public void setAt(String index,V value){
+    void setAt(String index,V value){
         field.put(index,value);
         signal();
     }
 
-    public void setAll(Map<String,V> map){
+    void setAll(Map<String,V> map){
         field.putAll(map);
         signal();
     }
 
     @SuppressWarnings("unused")
-    public void removeAt(String index){
+    void removeAt(String index){
         field.remove(index);
         signal();
     }
 
-    public void clear(){
+    void clear(){
         field.clear();
         signal();
     }

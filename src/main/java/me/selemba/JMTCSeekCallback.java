@@ -1,5 +1,5 @@
 package me.selemba;
 
-public interface MediaTransportControlsSeekCallback {
+public interface JMTCSeekCallback {
     void callback(Long position);
 }

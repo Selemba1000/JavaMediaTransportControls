@@ -5,19 +5,19 @@ import java.io.File;
 
 public class GeneralTest {
 
-    boolean flag = false;
-
     @Test
     void test() throws InterruptedException {
-        MediaTransportControls control = MediaTransportControls.getInstance(new MediaTransportControlsSettings("test-application","test-application"));
-        MediaTransportControlsCallbacks callbacks = new MediaTransportControlsCallbacks();
+
+
+
+        JMTC control = JMTC.getInstance(new JMTCSettings("test-application","test-application"));
+        JMTCCallbacks callbacks = new JMTCCallbacks();
         callbacks.onPlay = () -> {
-            flag = true;
             System.out.println("next");
-            control.setPlayingState(MediaTransportControlsPlayingState.PLAYING);
+            control.setPlayingState(JMTCPlayingState.PLAYING);
         };
-        callbacks.onPause = () -> control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
-        control.setEnabledButtons(new MediaTransportControlsEnabledButtons(
+        callbacks.onPause = () -> control.setPlayingState(JMTCPlayingState.PAUSED);
+        control.setEnabledButtons(new JMTCEnabledButtons(
                 true,
                 true,
                 true,
@@ -26,9 +26,9 @@ public class GeneralTest {
                 ));
         control.setCallbacks(callbacks);
         control.setEnabled(true);
-        control.setMediaType(MediaTransportControlsMediaType.Music);
-        control.setPlayingState(MediaTransportControlsPlayingState.PAUSED);
-        control.setMediaProperties(new MediaTransportControlsMusicProperties(
+        control.setMediaType(JMTCMediaType.Music);
+        control.setPlayingState(JMTCPlayingState.PAUSED);
+        control.setMediaProperties(new JMTCMusicProperties(
                 "TestTitle",
                 "TestArtist",
                 "test",
@@ -38,13 +38,13 @@ public class GeneralTest {
                 1,
                 new File(System.getProperty("user.home")+"/Downloads/no_cover.jpeg")
         ));
-        control.setTimelineProperties(new MediaTransportControlsTimelineProperties(
+        control.setTimelineProperties(new JMTCTimelineProperties(
                 0L,
                 100000L,
                 0L,
                 100000L
         ));
-        control.setPlayingState(MediaTransportControlsPlayingState.PLAYING);
+        control.setPlayingState(JMTCPlayingState.PLAYING);
         control.updateDisplay();
         for (Long l = 0L; l < 100000L;l+=1000L){
             control.setPosition(l);

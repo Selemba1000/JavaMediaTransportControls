@@ -1,6 +1,6 @@
 package me.selemba.linux;
 
-import me.selemba.MediaTransportControlsParameters;
+import me.selemba.JMTCParameters;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;
@@ -12,6 +12,9 @@ import org.freedesktop.dbus.types.Variant;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static me.selemba.JMTCParameters.LoopStatus.*;
+import static me.selemba.JMTCParameters.LoopStatus.Playlist;
 
 @DBusInterfaceName("org.mpris.MediaPlayer2.Player")
 @DBusProperty(name = "Metadata", type = Map.class, access = Access.READ)
@@ -90,17 +93,31 @@ public interface MPRISPlayer2Player extends DBusInterface {
             this.value = value;
         }
 
-        MediaTransportControlsParameters.LoopStatus toOuter(){
+        JMTCParameters.LoopStatus toOuter(){
             switch (this){
                 case None:
-                    return MediaTransportControlsParameters.LoopStatus.None;
+                    return JMTCParameters.LoopStatus.None;
                 case Track:
-                    return MediaTransportControlsParameters.LoopStatus.Track;
+                    return JMTCParameters.LoopStatus.Track;
                 case Playlist:
-                    return MediaTransportControlsParameters.LoopStatus.Playlist;
+                    return JMTCParameters.LoopStatus.Playlist;
             }
             throw new IllegalStateException();
         }
+
+        static LoopStatus fromInner(JMTCParameters.LoopStatus status){
+            switch (status){
+                case None:
+                    return MPRISPlayer2Player.LoopStatus.None;
+                case Track:
+                    return MPRISPlayer2Player.LoopStatus.Track;
+                case Playlist:
+                    return MPRISPlayer2Player.LoopStatus.Playlist;
+                default:
+                    throw new IllegalStateException();
+            }
+        }
+
     }
 
     class Metadata{

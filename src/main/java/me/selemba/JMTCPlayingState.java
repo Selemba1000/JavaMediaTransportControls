@@ -1,6 +1,6 @@
 package me.selemba;
 
-public enum MediaTransportControlsPlayingState {
+public enum JMTCPlayingState {
     PLAYING,
     PAUSED,
     STOPPED,

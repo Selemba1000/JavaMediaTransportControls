@@ -1,11 +1,11 @@
 package me.selemba;
 
-public class MediaTransportControlsSettings {
+public class JMTCSettings {
 
     final String playerName;
     final String desktopFile;
 
-    public MediaTransportControlsSettings(String playerName,String desktopFile){
+    public JMTCSettings(String playerName, String desktopFile){
         this.playerName = playerName;
         this.desktopFile = desktopFile;
     }

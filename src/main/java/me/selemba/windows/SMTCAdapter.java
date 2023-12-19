@@ -3,7 +3,7 @@ package me.selemba.windows;
 import com.sun.jna.Library;
 import com.sun.jna.WString;
 
-public interface SMTCAdapter extends Library {
+interface SMTCAdapter extends Library {
     void init();
 
     void setOnPlay(ButtonPressedCallback callback);
