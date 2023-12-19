@@ -12,7 +12,7 @@ class SeekCallback implements Callback {
     }
 
     @SuppressWarnings("unused")
-    void callback(Long position) {
+    public void callback(Long position) {
         if (callbackDel != null) {
             callbackDel.callback(position);
         }

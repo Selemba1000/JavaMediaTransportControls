@@ -2,9 +2,9 @@ package io.github.selemba1000.windows;
 
 import com.sun.jna.IntegerType;
 
-class UnsignedInt extends IntegerType {
+public class UnsignedInt extends IntegerType {
     @SuppressWarnings("unused")
-    UnsignedInt() {
+    public UnsignedInt() {
         super(4, true);
     }
 
