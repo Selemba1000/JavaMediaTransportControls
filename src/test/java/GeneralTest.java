@@ -13,7 +13,6 @@ public class GeneralTest {
         JMTC control = JMTC.getInstance(new JMTCSettings("test-application","test-application"));
         JMTCCallbacks callbacks = new JMTCCallbacks();
         callbacks.onPlay = () -> {
-            System.out.println("next");
             control.setPlayingState(JMTCPlayingState.PLAYING);
         };
         callbacks.onPause = () -> control.setPlayingState(JMTCPlayingState.PAUSED);
@@ -36,7 +35,7 @@ public class GeneralTest {
                 new String[]{},
                 0,
                 1,
-                new File(System.getProperty("user.home")+"/Downloads/no_cover.jpeg")
+                null
         ));
         control.setTimelineProperties(new JMTCTimelineProperties(
                 0L,

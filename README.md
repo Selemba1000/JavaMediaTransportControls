@@ -88,4 +88,4 @@ jmtc.updateDisplay();
 jmtc.setPosition(100L);
 ```
 ## License
-**TODO**
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
