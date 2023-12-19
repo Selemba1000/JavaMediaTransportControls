@@ -87,5 +87,7 @@ jmtc.setPlayingState(JMTCPlayingState.PLAYING);
 jmtc.updateDisplay();
 jmtc.setPosition(100L);
 ```
+For more information see the JavaDoc in code.
+
 ## License
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
