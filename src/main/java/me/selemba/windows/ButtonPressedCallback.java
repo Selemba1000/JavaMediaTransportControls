@@ -11,6 +11,7 @@ class ButtonPressedCallback implements Callback {
         this.callbackDel = callback;
     }
 
+    @SuppressWarnings("unused")
     public void callback() {
         if (callbackDel != null) {
             callbackDel.callback();

@@ -10,15 +10,15 @@ public class WindowsJMTC extends JMTC {
 
     private final SMTCAdapter lib = Native.load("SMTCAdapter", SMTCAdapter.class);
 
-    public WindowsJMTC(){
+    public WindowsJMTC() {
         super();
         lib.init();
     }
 
     @Override
-    public JMTCPlayingState getPlayingState(){
+    public JMTCPlayingState getPlayingState() {
         int res = lib.getPlaybackState();
-        switch (res){
+        switch (res) {
             case 0:
                 return JMTCPlayingState.CLOSED;
             case 1:
@@ -35,8 +35,8 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public void setPlayingState(JMTCPlayingState state){
-        switch (state){
+    public void setPlayingState(JMTCPlayingState state) {
+        switch (state) {
             case CLOSED:
                 lib.setPlaybackState(0);
             case PAUSED:
@@ -81,12 +81,12 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public JMTCParameters getParameters(){
-        return new JMTCParameters(JMTCParameters.LoopStatus.None,1.0,1.0,false);
+    public JMTCParameters getParameters() {
+        return new JMTCParameters(JMTCParameters.LoopStatus.None, 1.0, 1.0, false);
     }
 
     @Override
-    public void setParameters(JMTCParameters parameters){
+    public void setParameters(JMTCParameters parameters) {
         //TODO Windows parameters
     }
 
@@ -97,7 +97,7 @@ public class WindowsJMTC extends JMTC {
         lib.setOnStop(new ButtonPressedCallback(callbacks.onStop));
         lib.setOnNext(new ButtonPressedCallback(callbacks.onNext));
         lib.setOnPrevious(new ButtonPressedCallback(callbacks.onPrevious));
-        lib.setOnSeek(new SeekCallback (callbacks.onSeek));
+        lib.setOnSeek(new SeekCallback(callbacks.onSeek));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class WindowsJMTC extends JMTC {
     @Override
     public JMTCMediaType getMediaType() {
         int res = lib.getMediaType();
-        switch (res){
+        switch (res) {
             //TODO MediaTypes
             case 0:
                 return JMTCMediaType.Music;
@@ -136,7 +136,7 @@ public class WindowsJMTC extends JMTC {
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public void setMediaType(JMTCMediaType mediaType) {
-        switch (mediaType){
+        switch (mediaType) {
             //TODO MediaTypes
             case Music:
                 lib.setMediaType(0);
@@ -160,21 +160,24 @@ public class WindowsJMTC extends JMTC {
 
     @Override
     public void setMediaProperties(JMTCMediaProperties mediaProperties) {
-        if(mediaProperties.getClass() == JMTCMusicProperties.class){
+        if (mediaProperties.getClass() == JMTCMusicProperties.class) {
             JMTCMusicProperties mediaPropertiesCast = (JMTCMusicProperties) mediaProperties;
             lib.setMusicTitle(new WString(mediaPropertiesCast.title));
             lib.setMusicArtist(new WString(mediaPropertiesCast.artist));
-            if(! mediaPropertiesCast.albumTitle.isEmpty()) lib.setMusicAlbumTitle(new WString(mediaPropertiesCast.albumTitle));
-            if(! mediaPropertiesCast.albumArtist.isEmpty())lib.setMusicTitle(new WString(mediaPropertiesCast.albumArtist));
-            if(mediaPropertiesCast.albumTracks > 0) lib.setMusicAlbumTrackCount(new UnsignedInt(mediaPropertiesCast.albumTracks));
-            if(mediaPropertiesCast.track > 0)lib.setMusicTrack(new UnsignedInt(mediaPropertiesCast.track));
+            if (!mediaPropertiesCast.albumTitle.isEmpty())
+                lib.setMusicAlbumTitle(new WString(mediaPropertiesCast.albumTitle));
+            if (!mediaPropertiesCast.albumArtist.isEmpty())
+                lib.setMusicAlbumArtist(new WString(mediaPropertiesCast.albumArtist));
+            if (mediaPropertiesCast.albumTracks > 0)
+                lib.setMusicAlbumTrackCount(new UnsignedInt(mediaPropertiesCast.albumTracks));
+            if (mediaPropertiesCast.track > 0) lib.setMusicTrack(new UnsignedInt(mediaPropertiesCast.track));
             lib.clearMusicGenres();
-            for (String genre: mediaPropertiesCast.genres
-                 ) {
+            for (String genre : mediaPropertiesCast.genres
+            ) {
                 lib.addMusicGenre(new WString(genre));
             }
-            if(((JMTCMusicProperties) mediaProperties).art!=null) {
-                lib.setThumbnail(new WString( ((JMTCMusicProperties) mediaProperties).art.toURI().toString()));
+            if (((JMTCMusicProperties) mediaProperties).art != null) {
+                lib.setThumbnail(new WString(((JMTCMusicProperties) mediaProperties).art.toURI().toString()));
             }
         }
     }

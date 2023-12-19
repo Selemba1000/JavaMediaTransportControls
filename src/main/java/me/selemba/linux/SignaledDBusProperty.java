@@ -12,29 +12,29 @@ class SignaledDBusProperty<T> extends DBusProperty<T> implements SignaledDBusPro
     private final String interfaceName;
     private DBusConnection connection;
 
-    @Override
-    public void ProvideConnection(DBusConnection connection){
-        this.connection = connection;
-    }
-
     SignaledDBusProperty(T field, String fieldName, String objectPath, String interfaceName) {
-        super(field,fieldName);
+        super(field, fieldName);
         this.objectPath = objectPath;
         this.interfaceName = interfaceName;
     }
 
     @Override
-    public void setValue(T value){
+    public void ProvideConnection(DBusConnection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public void setValue(T value) {
         super.setValue(value);
         signal();
     }
 
     @Override
-    public void signal(){
+    public void signal() {
         try {
             Properties.PropertiesChanged msg = new Properties.PropertiesChanged(objectPath, interfaceName, this.getVariantMap(), List.of());
             connection.sendMessage(msg);
-        }catch (DBusException e){
+        } catch (DBusException e) {
             //TODO logging
         }
     }

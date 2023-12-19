@@ -2,6 +2,7 @@ package me.selemba;
 
 import java.io.File;
 
+@SuppressWarnings("CanBeFinal")
 public class JMTCMusicProperties extends JMTCMediaProperties {
 
     public String title;

@@ -7,10 +7,13 @@ class SeekCallback implements Callback {
 
     private final JMTCSeekCallback callbackDel;
 
-    protected SeekCallback(JMTCSeekCallback callback){this.callbackDel = callback;}
+    protected SeekCallback(JMTCSeekCallback callback) {
+        this.callbackDel = callback;
+    }
 
-    void callback(Long position){
-        if(callbackDel!=null){
+    @SuppressWarnings("unused")
+    void callback(Long position) {
+        if (callbackDel != null) {
             callbackDel.callback(position);
         }
     }

@@ -10,17 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusPropertyInterface {
-    private final HashMap<String,V> field = new HashMap<>();
+    private final HashMap<String, V> field = new HashMap<>();
 
     private final String fieldName;
     private final String objectPath;
-    private  final String interfaceName;
+    private final String interfaceName;
     private DBusConnection connection;
-
-    @Override
-    public void ProvideConnection(DBusConnection connection){
-        this.connection = connection;
-    }
 
     SignaledDBusPropertyMap(String fieldName, String objectPath, String interfaceName) {
         this.fieldName = fieldName;
@@ -28,38 +23,43 @@ class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusP
         this.interfaceName = interfaceName;
     }
 
-    V getAt(String index){
+    @Override
+    public void ProvideConnection(DBusConnection connection) {
+        this.connection = connection;
+    }
+
+    V getAt(String index) {
         return field.get(index);
     }
 
-    void setAt(String index,V value){
-        field.put(index,value);
+    void setAt(String index, V value) {
+        field.put(index, value);
         signal();
     }
 
-    void setAll(Map<String,V> map){
+    void setAll(Map<String, V> map) {
         field.putAll(map);
         signal();
     }
 
     @SuppressWarnings("unused")
-    void removeAt(String index){
+    void removeAt(String index) {
         field.remove(index);
         signal();
     }
 
-    void clear(){
+    void clear() {
         field.clear();
         signal();
     }
 
     @Override
     public Map<String, Variant<?>> getVariantMap() {
-        HashMap<String,Variant<?>> map = new HashMap<>();
-        for (Map.Entry<String,V> entry : field.entrySet()){
-            map.put(entry.getKey(),new Variant<>(entry.getValue()));
+        HashMap<String, Variant<?>> map = new HashMap<>();
+        for (Map.Entry<String, V> entry : field.entrySet()) {
+            map.put(entry.getKey(), new Variant<>(entry.getValue()));
         }
-        return Map.of(fieldName,new Variant<>(map,"a{sv}"));
+        return Map.of(fieldName, new Variant<>(map, "a{sv}"));
     }
 
     @Override
@@ -72,7 +72,7 @@ class SignaledDBusPropertyMap<V> implements SignaledDBusPropertyInterface, DBusP
         try {
             Properties.PropertiesChanged msg = new Properties.PropertiesChanged(objectPath, interfaceName, this.getVariantMap(), List.of());
             connection.sendMessage(msg);
-        }catch (DBusException e){
+        } catch (DBusException e) {
             //TODO logging
         }
     }

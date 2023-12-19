@@ -8,44 +8,95 @@ import org.freedesktop.dbus.interfaces.Properties;
 import org.freedesktop.dbus.types.Variant;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player, Properties {
 
     private static final String generalInterface = "org.mpris.MediaPlayer2";
     private static final String playerInterface = "org.mpris.MediaPlayer2.Player";
-
-    private final PlayerProperties properties;
-
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanQuit = new SignaledDBusProperty<>(false, "CanQuit", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> Fullscreen = new SignaledDBusProperty<>(false, "Fullscreen", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanSetFullscreen = new SignaledDBusProperty<>(false, "CanSetFullscreen", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanRaise = new SignaledDBusProperty<>(false, "CanRaise", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> HasTrackList = new SignaledDBusProperty<>(false, "HasTrackList", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String> Identity = new SignaledDBusProperty<>("free-danza", "Identity", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String> DesktopEntry = new SignaledDBusProperty<>("brave-browser", "DesktopEntry", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String[]> SupportedUriSchemes = new SignaledDBusProperty<>(new String[]{"danza"}, "SupportedUriSchemes", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String[]> SupportedMimeTypes = new SignaledDBusProperty<>(new String[]{}, "SupportedMimeTypes", getObjectPath(), generalInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String> PlaybackStatus = new SignaledDBusProperty<>("Stopped", "PlaybackStatus", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<String> LoopStatus = new SignaledDBusProperty<>("None", "LoopStatus", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Double> Rate = new SignaledDBusProperty<>(1.0, "Rate", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> Shuffle = new SignaledDBusProperty<>(false, "Shuffle", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusPropertyMap<Object> Metadata = new SignaledDBusPropertyMap<>("Metadata", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Double> Volume = new SignaledDBusProperty<>(1.0, "Volume", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final DBusProperty<Long> Position = new DBusProperty<>(0L, "Position");
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Double> MaximumRate = new SignaledDBusProperty<>(1.0, "MaximumRate", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Double> MinimumRate = new SignaledDBusProperty<>(1.0, "MinimumRate", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanGoNext = new SignaledDBusProperty<>(false, "CanGoNext", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanGoPrevious = new SignaledDBusProperty<>(false, "CanGoPrevious", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanPlay = new SignaledDBusProperty<>(true, "CanPlay", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanPause = new SignaledDBusProperty<>(true, "CanPause", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final SignaledDBusProperty<Boolean> CanSeek = new SignaledDBusProperty<>(true, "CanSeek", getObjectPath(), playerInterface);
+    @SuppressWarnings("unused")
+    final DBusProperty<Boolean> CanControl = new DBusProperty<>(true, "CanControl");
+    protected JMTCCallbacks callbacks;
     private DBusConnection connection;
 
     public LinuxJMTC(String playerName, String desktopFile) {
-        properties = new PlayerProperties(playerName, desktopFile);
         try {
             connection = DBusConnectionBuilder.forSessionBus().build();
-            connection.requestBusName("org.mpris.MediaPlayer2."+playerName);
-            connection.exportObject("/org/mpris/MediaPlayer2",this);
-        }catch (Exception e){
-            System.out.println("conn failed: "+e.getMessage());
+            connection.requestBusName("org.mpris.MediaPlayer2." + playerName);
+            connection.exportObject("/org/mpris/MediaPlayer2", this);
+        } catch (Exception e) {
+            System.out.println("conn failed: " + e.getMessage());
         }
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for (Field field : fields){
-            if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)){
+        for (Field field : fields) {
+            if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)) {
                 try {
                     ((SignaledDBusPropertyInterface) field.get(this)).ProvideConnection(connection);
                     ((SignaledDBusPropertyInterface) field.get(this)).signal();
-                }catch (Exception e){
+                } catch (Exception e) {
                     //TODO logging
                 }
             }
         }
+
+        Identity.setValue(playerName);
+        DesktopEntry.setValue(desktopFile);
     }
 
     @Override
     public JMTCPlayingState getPlayingState() {
-        switch (PlaybackStatus.getValue()){
+        switch (PlaybackStatus.getValue()) {
             case "Playing":
                 return JMTCPlayingState.PLAYING;
             case "Paused":
@@ -59,7 +110,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public void setPlayingState(JMTCPlayingState state) {
-        switch (state){
+        switch (state) {
             case PLAYING:
                 PlaybackStatus.setValue("Playing");
                 break;
@@ -102,23 +153,21 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     }
 
     @Override
-    public JMTCParameters getParameters(){
+    public JMTCParameters getParameters() {
         return new JMTCParameters(
-                properties.LoopStatus.toOuter(),
-                properties.Volume,
-                properties.Rate,
-                properties.Shuffle
+                me.selemba.linux.MPRISPlayer2Player.LoopStatus.valueOf(LoopStatus.getValue()).toOuter(),
+                Volume.getValue(),
+                Rate.getValue(),
+                Shuffle.getValue()
         );
     }
 
-    public void setParameters(JMTCParameters parameters){
-        properties.LoopStatus = MPRISPlayer2Player.LoopStatus.fromInner(parameters.loopStatus);
-        properties.Volume = parameters.volume;
-        properties.Rate = parameters.rate;
-        properties.Shuffle = parameters.shuffle;
+    public void setParameters(JMTCParameters parameters) {
+        LoopStatus.setValue(MPRISPlayer2Player.LoopStatus.fromInner(parameters.loopStatus).value);
+        Volume.setValue(parameters.volume);
+        Rate.setValue(parameters.rate);
+        Shuffle.setValue(parameters.shuffle);
     }
-
-    protected JMTCCallbacks callbacks;
 
     @Override
     public void setCallbacks(JMTCCallbacks callbacks) {
@@ -136,7 +185,8 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     }
 
     @Override
-    public void updateDisplay() {}
+    public void updateDisplay() {
+    }
 
     @Override
     public void resetDisplay() {
@@ -149,15 +199,16 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     }
 
     @Override
-    public void setMediaType(JMTCMediaType mediaType) {}
+    public void setMediaType(JMTCMediaType mediaType) {
+    }
 
     @Override
     public JMTCMediaProperties getMediaProperties() {
         return new JMTCMusicProperties(
                 (String) Metadata.getAt("xesam:title"),
-                Arrays.toString((String[])Metadata.getAt("xesam:artist")),
+                Arrays.toString((String[]) Metadata.getAt("xesam:artist")),
                 (String) Metadata.getAt("xesam:album"),
-                Arrays.toString((String[])Metadata.getAt("xesam:albumArtist")),
+                Arrays.toString((String[]) Metadata.getAt("xesam:albumArtist")),
                 new String[]{},
                 0,
                 (Integer) Metadata.getAt("xesam:trackNumber"),
@@ -167,18 +218,18 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public void setMediaProperties(JMTCMediaProperties mediaProperties) {
-        if(mediaProperties.getClass() == JMTCMusicProperties.class) {
+        if (mediaProperties.getClass() == JMTCMusicProperties.class) {
             Metadata.setAll(Map.of(
-                    "xesam:title",((JMTCMusicProperties) mediaProperties).title,
-                    "xesam:artist",((JMTCMusicProperties) mediaProperties).artist.split(","),
-                    "xesam:album",((JMTCMusicProperties) mediaProperties).albumTitle,
-                    "xesam:albumArtist",((JMTCMusicProperties) mediaProperties).albumArtist.split(","),
-                    "xesam:trackNumber",((JMTCMusicProperties) mediaProperties).track,
-                    "mpris:trackid","/me/selemba/std"
+                    "xesam:title", ((JMTCMusicProperties) mediaProperties).title,
+                    "xesam:artist", ((JMTCMusicProperties) mediaProperties).artist.split(","),
+                    "xesam:album", ((JMTCMusicProperties) mediaProperties).albumTitle,
+                    "xesam:albumArtist", ((JMTCMusicProperties) mediaProperties).albumArtist.split(","),
+                    "xesam:trackNumber", ((JMTCMusicProperties) mediaProperties).track,
+                    "mpris:trackid", "/me/selemba/std"
             ));
-            if(((JMTCMusicProperties) mediaProperties).art!=null){
+            if (((JMTCMusicProperties) mediaProperties).art != null) {
                 Metadata.setAt(
-                        "mpris:artUrl",((JMTCMusicProperties) mediaProperties).art.toURI().toString()
+                        "mpris:artUrl", ((JMTCMusicProperties) mediaProperties).art.toURI().toString()
                 );
             }
         }
@@ -196,51 +247,51 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public void Previous() {
-        if (callbacks!=null&&callbacks.onPrevious!=null){
+        if (callbacks != null && callbacks.onPrevious != null) {
             callbacks.onPrevious.callback();
         }
     }
 
     @Override
     public void Next() {
-        if (callbacks!=null&&callbacks.onNext!=null){
+        if (callbacks != null && callbacks.onNext != null) {
             callbacks.onNext.callback();
         }
     }
 
     @Override
     public void Stop() {
-        if (callbacks!=null&&callbacks.onStop!=null){
+        if (callbacks != null && callbacks.onStop != null) {
             callbacks.onStop.callback();
         }
     }
 
     @Override
     public void Play() {
-        if (callbacks!=null&&callbacks.onPlay!=null){
+        if (callbacks != null && callbacks.onPlay != null) {
             callbacks.onPlay.callback();
         }
     }
 
     @Override
     public void Pause() {
-        if (callbacks!=null&&callbacks.onPause!=null){
+        if (callbacks != null && callbacks.onPause != null) {
             callbacks.onPause.callback();
         }
     }
 
     @Override
     public void PlayPause() {
-        if (callbacks!=null&&callbacks.onPlay!=null&&callbacks.onPause!=null){
-            if(Objects.equals(PlaybackStatus.getValue(), "Playing")) callbacks.onPause.callback();
+        if (callbacks != null && callbacks.onPlay != null && callbacks.onPause != null) {
+            if (Objects.equals(PlaybackStatus.getValue(), "Playing")) callbacks.onPause.callback();
             else callbacks.onPlay.callback();
         }
     }
 
     @Override
     public void Seek(long _arg0) {
-        if (callbacks!=null&&callbacks.onSeek!=null){
-            callbacks.onSeek.callback(_arg0 + properties.Position);
+        if (callbacks != null && callbacks.onSeek != null) {
+            callbacks.onSeek.callback(_arg0 + Position.getValue());
         }
     }
 
@@ -251,7 +302,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public void SetPosition(DBusPath _arg0, long _arg1) {
-        if (callbacks!=null&&callbacks.onSeek!=null){
+        if (callbacks != null && callbacks.onSeek != null) {
             callbacks.onSeek.callback(_arg1);
         }
     }
@@ -261,8 +312,8 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     public <A> A Get(String _interfaceName, String _propertyName) {
         A ret = null;
         try {
-            ret = (A) ((DBusPropertyInterface)this.getClass().getDeclaredField(_propertyName).get(this)).getVariantMap().get(_propertyName);
-        } catch (Exception e){
+            ret = (A) ((DBusPropertyInterface) this.getClass().getDeclaredField(_propertyName).get(this)).getVariantMap().get(_propertyName);
+        } catch (Exception e) {
             //TODO logging
         }
         System.out.println(ret);
@@ -271,10 +322,10 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public <A> void Set(String _interfaceName, String _propertyName, A _value) {
-        switch (_propertyName){
+        switch (_propertyName) {
             case "LoopStatus":
                 //properties.LoopStatus = MPRISPlayer2Player.LoopStatus.valueOf((String) _value);
-                callbacks.onLoop.callback(MPRISPlayer2Player.LoopStatus.valueOf( (String)_value).toOuter() );
+                callbacks.onLoop.callback(MPRISPlayer2Player.LoopStatus.valueOf((String) _value).toOuter());
                 break;
             case "Rate":
                 //properties.Rate = (Double) _value;
@@ -294,15 +345,15 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     @Override
     public Map<String, Variant<?>> GetAll(String _interfaceName) {
 
-        Map<String,Variant<?>> map = new HashMap<>();
+        Map<String, Variant<?>> map = new HashMap<>();
 
-        for(Field field : this.getClass().getDeclaredFields()){
+        for (Field field : this.getClass().getDeclaredFields()) {
             try {
-                if(field.get(this) instanceof DBusProperty){
+                if (field.get(this) instanceof DBusProperty) {
                     map.putAll(((DBusProperty<?>) field.get(this)).getVariantMap());
                 }
             } catch (IllegalAccessException e) {
-
+                //TODO logging
             }
         }
 
@@ -312,120 +363,6 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     @Override
     public String getObjectPath() {
         return "/org/mpris/MediaPlayer2";
-    }
-
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanQuit = new SignaledDBusProperty<>(false,"CanQuit",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> Fullscreen = new SignaledDBusProperty<>(false,"Fullscreen",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanSetFullscreen = new SignaledDBusProperty<>(false,"CanSetFullscreen",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanRaise = new SignaledDBusProperty<>(false,"CanRaise",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> HasTrackList = new SignaledDBusProperty<>(false,"HasTrackList",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String> Identity = new SignaledDBusProperty<>("free-danza","Identity",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String> DesktopEntry = new SignaledDBusProperty<>("brave-browser","DesktopEntry",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String[]> SupportedUriSchemes = new SignaledDBusProperty<>(new String[]{"danza"},"SupportedUriSchemes",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String[]> SupportedMimeTypes = new SignaledDBusProperty<>(new String[]{},"SupportedMimeTypes",getObjectPath(),generalInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String> PlaybackStatus = new SignaledDBusProperty<>("Stopped","PlaybackStatus",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<String> LoopStatus = new SignaledDBusProperty<>("None","LoopStatus",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Double> Rate = new SignaledDBusProperty<>(1.0,"Rate",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> Shuffle = new SignaledDBusProperty<>(false,"Shuffle",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusPropertyMap<Object> Metadata = new SignaledDBusPropertyMap<>("Metadata",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Double> Volume = new SignaledDBusProperty<>(1.0,"Volume",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final DBusProperty<Long> Position = new DBusProperty<>(0L,"Position");
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Double> MaximumRate = new SignaledDBusProperty<>(1.0,"MaximumRate",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Double> MinimumRate = new SignaledDBusProperty<>(1.0,"MinimumRate",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanGoNext = new SignaledDBusProperty<>(false,"CanGoNext",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanGoPrevious = new SignaledDBusProperty<>(false,"CanGoPrevious",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanPlay = new SignaledDBusProperty<>(true,"CanPlay",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanPause = new SignaledDBusProperty<>(true,"CanPause",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final SignaledDBusProperty<Boolean> CanSeek = new SignaledDBusProperty<>(true,"CanSeek",getObjectPath(),playerInterface);
-    @SuppressWarnings("unused")
-    final DBusProperty<Boolean> CanControl = new DBusProperty<>(true,"CanControl");
-
-
-    static class PlayerProperties{
-        boolean Fullscreen = false;
-        boolean CanSetFullscreen = false;
-        boolean CanRaise = false;
-        boolean HasTrackList = false;
-        String Identity;
-        String DesktopEntry;
-        String[] SupportedUriSchemes = {""};
-        String[] SupportedMimeTypes = {""};
-
-        //Player Interface
-
-        PlaybackStatus PlaybackStatus = MPRISPlayer2Player.PlaybackStatus.Stopped;
-        LoopStatus LoopStatus = MPRISPlayer2Player.LoopStatus.None;
-        Double Rate = 1.0;
-        boolean Shuffle = false;
-        Metadata Metadata = new Metadata();
-        double Volume = 1.0;
-        Long Position = 0L;
-        Double MinimumRate = 1.0;
-        Double MaximumRate = 1.0;
-        boolean CanGoNext = false;
-        boolean CanGoPrevious = false;
-        boolean CanPlay = true;
-        boolean CanPause = true;
-        boolean CanSeek = true;
-        boolean CanControl = true;
-
-        PlayerProperties(String identity, String desktopEntry) {
-            Identity = identity;
-            DesktopEntry = desktopEntry;
-        }
-
-        Map<String, Variant<?>> toMap(){
-            HashMap<String,Variant<?>> map = new HashMap<>();
-            //map.put("CanQuit",new Variant<>(this.CanQuit));
-            map.put("Fullscreen", new Variant<>(this.Fullscreen));
-            map.put("CanSetFullscreen", new Variant<>(this.CanSetFullscreen));
-            map.put("CanRaise", new Variant<>(this.CanRaise));
-            map.put("HasTrackList", new Variant<>(this.HasTrackList));
-            map.put("Identity", new Variant<>(this.Identity));
-            map.put("DesktopEntry", new Variant<>(this.DesktopEntry));
-            map.put("SupportedUriSchemes", new Variant<>(this.SupportedUriSchemes));
-            map.put("SupportedMimeTypes", new Variant<>(this.SupportedMimeTypes));
-            map.put("PlaybackStatus", new Variant<>(this.PlaybackStatus));
-            map.put("LoopStatus", new Variant<>(this.LoopStatus));
-            map.put("Rate", new Variant<>(this.Rate));
-            map.put("Shuffle", new Variant<>(this.Shuffle));
-            map.put("Metadata", new Variant<>(this.Metadata.toMap(), "a{sv}"));
-            map.put("Volume", new Variant<>(this.Volume));
-            map.put("Position", new Variant<>(this.Position));
-            map.put("MinimumRate", new Variant<>(this.MinimumRate));
-            map.put("MaximumRate", new Variant<>(this.MaximumRate));
-            map.put("CanGoNext", new Variant<>(this.CanGoNext));
-            map.put("CanGoPrevious", new Variant<>(this.CanGoPrevious));
-            map.put("CanPlay", new Variant<>(this.CanPlay));
-            map.put("CanPause", new Variant<>(this.CanPause));
-            map.put("CanSeek", new Variant<>(this.CanSeek));
-            map.put("CanControl", new Variant<>(this.CanControl));
-            return map;
-        }
-
     }
 
 }

@@ -1,5 +1,6 @@
 package me.selemba;
 
+@SuppressWarnings("CanBeFinal")
 public class JMTCParameters {
 
     public LoopStatus loopStatus;
@@ -7,7 +8,7 @@ public class JMTCParameters {
     public Double rate;
     public Boolean shuffle;
 
-    public JMTCParameters(LoopStatus loopStatus, Double volume, Double rate, Boolean shuffle){
+    public JMTCParameters(LoopStatus loopStatus, Double volume, Double rate, Boolean shuffle) {
         this.loopStatus = loopStatus;
         this.volume = volume;
         this.rate = rate;
