@@ -3,6 +3,7 @@ package io.github.selemba1000.windows;
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.WString;
+import org.graalvm.compiler.hotspot.stubs.VerifyOopStub;
 
 interface SMTCAdapter extends Library {
     void init();
@@ -16,6 +17,12 @@ interface SMTCAdapter extends Library {
     void setOnNext(ButtonPressedCallback callback);
 
     void setOnPrevious(ButtonPressedCallback callback);
+
+    void setOnRateChanged(RateCallback callback);
+
+    void setOnShuffleChanged(ShuffleCallback callback);
+
+    void setOnLoopChanged(LoopStatusCallback callback);
 
     void setOnSeek(SeekCallback callback);
 
@@ -42,6 +49,18 @@ interface SMTCAdapter extends Library {
     boolean getStopEnabled();
 
     void setStopEnabled(boolean enabled);
+
+    Double getRate();
+
+    void setRate(Double rate);
+
+    Boolean getShuffle();
+
+    void setShuffle(Boolean shuffle);
+
+    UnsignedInt getLoop();
+
+    void setLoop(UnsignedInt loop);
 
     UnsignedInt getPlaybackState();
 

@@ -90,12 +90,37 @@ public class WindowsJMTC extends JMTC {
 
     @Override
     public JMTCParameters getParameters() {
-        return new JMTCParameters(JMTCParameters.LoopStatus.None, 1.0, 1.0, false);
+        JMTCParameters.LoopStatus loop = JMTCParameters.LoopStatus.None;
+        switch (lib.getLoop().intValue()){
+            case 0:
+                loop = JMTCParameters.LoopStatus.None;
+                break;
+            case 1:
+                loop = JMTCParameters.LoopStatus.Track;
+                break;
+            case 2:
+                loop = JMTCParameters.LoopStatus.Playlist;
+                break;
+        }
+        return new JMTCParameters(
+                loop, 1.0, lib.getRate(), lib.getShuffle());
     }
 
     @Override
     public void setParameters(JMTCParameters parameters) {
-        //TODO Windows parameters
+        switch (parameters.loopStatus){
+            case None:
+                lib.setLoop(new UnsignedInt(0));
+                break;
+            case Track:
+                lib.setLoop(new UnsignedInt(1));
+                break;
+            case Playlist:
+                lib.setLoop(new UnsignedInt(2));
+                break;
+        }
+        lib.setRate(parameters.rate);
+        lib.setShuffle(parameters.shuffle);
     }
 
     @Override
@@ -106,6 +131,9 @@ public class WindowsJMTC extends JMTC {
         lib.setOnNext(new ButtonPressedCallback(callbacks.onNext));
         lib.setOnPrevious(new ButtonPressedCallback(callbacks.onPrevious));
         lib.setOnSeek(new SeekCallback(callbacks.onSeek));
+        lib.setOnRateChanged(new RateCallback(callbacks.onRate));
+        lib.setOnShuffleChanged(new ShuffleCallback(callbacks.onShuffle));
+        lib.setOnLoopChanged(new LoopStatusCallback(callbacks.onLoop));
     }
 
     @Override
