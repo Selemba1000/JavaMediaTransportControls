@@ -1,6 +1,7 @@
 package io.github.selemba1000.windows;
 
 import com.sun.jna.Library;
+import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 
 interface SMTCAdapter extends Library {
@@ -42,9 +43,9 @@ interface SMTCAdapter extends Library {
 
     void setStopEnabled(boolean enabled);
 
-    int getPlaybackState();
+    UnsignedInt getPlaybackState();
 
-    void setPlaybackState(int state);
+    void setPlaybackState(UnsignedInt state);
 
     void setTimelineProperties(Long start, Long end, Long seekStart, Long seekEnd);
 
@@ -76,7 +77,9 @@ interface SMTCAdapter extends Library {
 
     void setMusicAlbumArtist(WString artist);
 
-    WString[] getMusicGenres();
+    Integer getMusicGenresSize();
+
+    WString getMusicGenreAt(UnsignedInt i);
 
     void addMusicGenre(WString genre);
 
