@@ -209,9 +209,9 @@ public class WindowsJMTC extends JMTC {
                 lib.setMusicAlbumTitle(new WString(mediaPropertiesCast.albumTitle));
             if (!mediaPropertiesCast.albumArtist.isEmpty())
                 lib.setMusicAlbumArtist(new WString(mediaPropertiesCast.albumArtist));
-            if (mediaPropertiesCast.albumTracks > 0)
+            if (mediaPropertiesCast.albumTracks >= 0)
                 lib.setMusicAlbumTrackCount(new UnsignedInt(mediaPropertiesCast.albumTracks));
-            if (mediaPropertiesCast.track > 0) lib.setMusicTrack(new UnsignedInt(mediaPropertiesCast.track));
+            if (mediaPropertiesCast.track >= 0) lib.setMusicTrack(new UnsignedInt(mediaPropertiesCast.track));
             lib.clearMusicGenres();
             for (String genre : mediaPropertiesCast.genres
             ) {
