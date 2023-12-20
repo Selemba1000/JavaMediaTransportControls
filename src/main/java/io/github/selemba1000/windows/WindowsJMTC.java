@@ -1,10 +1,13 @@
 package io.github.selemba1000.windows;
 
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 import io.github.selemba1000.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class WindowsJMTC extends JMTC {
 
@@ -17,8 +20,8 @@ public class WindowsJMTC extends JMTC {
 
     @Override
     public JMTCPlayingState getPlayingState() {
-        int res = lib.getPlaybackState();
-        switch (res) {
+        UnsignedInt res = lib.getPlaybackState();
+        switch (res.intValue()) {
             case 0:
                 return JMTCPlayingState.CLOSED;
             case 1:
@@ -38,15 +41,20 @@ public class WindowsJMTC extends JMTC {
     public void setPlayingState(JMTCPlayingState state) {
         switch (state) {
             case CLOSED:
-                lib.setPlaybackState(0);
+                lib.setPlaybackState(new UnsignedInt(0));
+                break;
             case PAUSED:
-                lib.setPlaybackState(1);
+                lib.setPlaybackState(new UnsignedInt(1));
+                break;
             case STOPPED:
-                lib.setPlaybackState(2);
+                lib.setPlaybackState(new UnsignedInt(2));
+                break;
             case PLAYING:
-                lib.setPlaybackState(3);
+                lib.setPlaybackState(new UnsignedInt(3));
+                break;
             case CHANGING:
-                lib.setPlaybackState(4);
+                lib.setPlaybackState(new UnsignedInt(4));
+                break;
         }
     }
 
@@ -82,12 +90,37 @@ public class WindowsJMTC extends JMTC {
 
     @Override
     public JMTCParameters getParameters() {
-        return new JMTCParameters(JMTCParameters.LoopStatus.None, 1.0, 1.0, false);
+        JMTCParameters.LoopStatus loop = JMTCParameters.LoopStatus.None;
+        switch (lib.getLoop().intValue()){
+            case 0:
+                loop = JMTCParameters.LoopStatus.None;
+                break;
+            case 1:
+                loop = JMTCParameters.LoopStatus.Track;
+                break;
+            case 2:
+                loop = JMTCParameters.LoopStatus.Playlist;
+                break;
+        }
+        return new JMTCParameters(
+                loop, 1.0, lib.getRate(), lib.getShuffle());
     }
 
     @Override
     public void setParameters(JMTCParameters parameters) {
-        //TODO Windows parameters
+        switch (parameters.loopStatus){
+            case None:
+                lib.setLoop(new UnsignedInt(0));
+                break;
+            case Track:
+                lib.setLoop(new UnsignedInt(1));
+                break;
+            case Playlist:
+                lib.setLoop(new UnsignedInt(2));
+                break;
+        }
+        lib.setRate(parameters.rate);
+        lib.setShuffle(parameters.shuffle);
     }
 
     @Override
@@ -98,6 +131,9 @@ public class WindowsJMTC extends JMTC {
         lib.setOnNext(new ButtonPressedCallback(callbacks.onNext));
         lib.setOnPrevious(new ButtonPressedCallback(callbacks.onPrevious));
         lib.setOnSeek(new SeekCallback(callbacks.onSeek));
+        lib.setOnRateChanged(new RateCallback(callbacks.onRate));
+        lib.setOnShuffleChanged(new ShuffleCallback(callbacks.onShuffle));
+        lib.setOnLoopChanged(new LoopStatusCallback(callbacks.onLoop));
     }
 
     @Override
@@ -145,13 +181,18 @@ public class WindowsJMTC extends JMTC {
 
     @Override
     public JMTCMediaProperties getMediaProperties() {
-        String[] genres = (String[]) Arrays.stream(lib.getMusicGenres()).map(WString::toString).toArray();
+        List<String> genres = new ArrayList<>();
+        for (int count = 0; count < lib.getMusicGenresSize(); count++){
+            genres.add(lib.getMusicGenreAt(new UnsignedInt(count)).toString());
+        }
+        String[] x = {};
+        String[] res = genres.toArray(x);
         return new JMTCMusicProperties(
                 lib.getMusicTitle().toString(),
                 lib.getMusicArtist().toString(),
                 lib.getMusicAlbumTitle().toString(),
                 lib.getMusicAlbumArtist().toString(),
-                genres,
+                res,
                 lib.getMusicAlbumTrackCount().intValue(),
                 lib.getMusicTrack().intValue(),
                 null
@@ -178,6 +219,7 @@ public class WindowsJMTC extends JMTC {
             }
             if (((JMTCMusicProperties) mediaProperties).art != null) {
                 lib.setThumbnail(new WString(((JMTCMusicProperties) mediaProperties).art.toURI().toString()));
+                System.out.println(((JMTCMusicProperties) mediaProperties).art.toURI().toString());
             }
         }
     }

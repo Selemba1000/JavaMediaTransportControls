@@ -1,7 +1,9 @@
 package io.github.selemba1000.windows;
 
 import com.sun.jna.Library;
+import com.sun.jna.Pointer;
 import com.sun.jna.WString;
+import org.graalvm.compiler.hotspot.stubs.VerifyOopStub;
 
 interface SMTCAdapter extends Library {
     void init();
@@ -15,6 +17,12 @@ interface SMTCAdapter extends Library {
     void setOnNext(ButtonPressedCallback callback);
 
     void setOnPrevious(ButtonPressedCallback callback);
+
+    void setOnRateChanged(RateCallback callback);
+
+    void setOnShuffleChanged(ShuffleCallback callback);
+
+    void setOnLoopChanged(LoopStatusCallback callback);
 
     void setOnSeek(SeekCallback callback);
 
@@ -42,9 +50,21 @@ interface SMTCAdapter extends Library {
 
     void setStopEnabled(boolean enabled);
 
-    int getPlaybackState();
+    Double getRate();
 
-    void setPlaybackState(int state);
+    void setRate(Double rate);
+
+    Boolean getShuffle();
+
+    void setShuffle(Boolean shuffle);
+
+    UnsignedInt getLoop();
+
+    void setLoop(UnsignedInt loop);
+
+    UnsignedInt getPlaybackState();
+
+    void setPlaybackState(UnsignedInt state);
 
     void setTimelineProperties(Long start, Long end, Long seekStart, Long seekEnd);
 
@@ -76,7 +96,9 @@ interface SMTCAdapter extends Library {
 
     void setMusicAlbumArtist(WString artist);
 
-    WString[] getMusicGenres();
+    Integer getMusicGenresSize();
+
+    WString getMusicGenreAt(UnsignedInt i);
 
     void addMusicGenre(WString genre);
 

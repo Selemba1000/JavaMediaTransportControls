@@ -3,7 +3,7 @@ package io.github.selemba1000.windows;
 import com.sun.jna.Callback;
 import io.github.selemba1000.JMTCSeekCallback;
 
-class SeekCallback implements Callback {
+public class SeekCallback implements Callback {
 
     private final JMTCSeekCallback callbackDel;
 
@@ -12,7 +12,7 @@ class SeekCallback implements Callback {
     }
 
     @SuppressWarnings("unused")
-    void callback(Long position) {
+    public void callback(Long position) {
         if (callbackDel != null) {
             callbackDel.callback(position);
         }
