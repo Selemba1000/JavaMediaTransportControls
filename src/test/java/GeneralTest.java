@@ -29,7 +29,7 @@ public class GeneralTest {
         control.setPlayingState(JMTCPlayingState.PAUSED);
         control.setMediaProperties(new JMTCMusicProperties(
                 "TestTitle",
-                "TestArtist",
+                "TestArtist,Artist2",
                 "test",
                 "tset",
                 new String[]{},
@@ -37,6 +37,7 @@ public class GeneralTest {
                 1,
                 null
         ));
+        control.setMediaProperties(control.getMediaProperties());
         control.setTimelineProperties(new JMTCTimelineProperties(
                 0L,
                 100000L,

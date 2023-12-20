@@ -206,7 +206,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     public JMTCMediaProperties getMediaProperties() {
         return new JMTCMusicProperties(
                 (String) Metadata.getAt("xesam:title"),
-                Arrays.toString((String[]) Metadata.getAt("xesam:artist")),
+                Arrays.toString((String[]) Metadata.getAt("xesam:artist")).replace("[", "").replace("]", ""),
                 (String) Metadata.getAt("xesam:album"),
                 Arrays.toString((String[]) Metadata.getAt("xesam:albumArtist")),
                 new String[]{},
