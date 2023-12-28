@@ -8,18 +8,20 @@ import io.github.selemba1000.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class WindowsJMTC extends JMTC {
 
-    private final SMTCAdapter lib = Native.load("SMTCAdapter", SMTCAdapter.class);
+    public final SMTCAdapter lib;
 
     public WindowsJMTC() {
         super();
+        lib = Native.load("SMTCAdapter", SMTCAdapter.class);
         lib.init();
     }
 
     @Override
-    public JMTCPlayingState getPlayingState() {
+    public synchronized JMTCPlayingState getPlayingState() {
         UnsignedInt res = lib.getPlaybackState();
         switch (res.intValue()) {
             case 0:
@@ -38,7 +40,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public void setPlayingState(JMTCPlayingState state) {
+    public synchronized void setPlayingState(JMTCPlayingState state) {
         switch (state) {
             case CLOSED:
                 lib.setPlaybackState(new UnsignedInt(0));
@@ -59,17 +61,17 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public boolean getEnabled() {
+    public synchronized boolean getEnabled() {
         return lib.getEnabled();
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public synchronized void setEnabled(boolean enabled) {
         lib.setEnabled(enabled);
     }
 
     @Override
-    public JMTCEnabledButtons getEnabledButtons() {
+    public synchronized JMTCEnabledButtons getEnabledButtons() {
         return new JMTCEnabledButtons(
                 lib.getPlayEnabled(),
                 lib.getPauseEnabled(),
@@ -80,7 +82,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public void setEnabledButtons(JMTCEnabledButtons enabledButtons) {
+    public synchronized void setEnabledButtons(JMTCEnabledButtons enabledButtons) {
         lib.setPlayEnabled(enabledButtons.isPlayEnabled);
         lib.setPauseEnabled(enabledButtons.isPauseEnabled);
         lib.setStopEnabled(enabledButtons.isStopEnabled);
@@ -89,7 +91,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public JMTCParameters getParameters() {
+    public synchronized JMTCParameters getParameters() {
         JMTCParameters.LoopStatus loop = JMTCParameters.LoopStatus.None;
         switch (lib.getLoop().intValue()){
             case 0:
@@ -107,7 +109,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public void setParameters(JMTCParameters parameters) {
+    public synchronized void setParameters(JMTCParameters parameters) {
         switch (parameters.loopStatus){
             case None:
                 lib.setLoop(new UnsignedInt(0));
@@ -123,42 +125,61 @@ public class WindowsJMTC extends JMTC {
         lib.setShuffle(parameters.shuffle);
     }
 
+    private static ButtonPressedCallback onPlay;
+    private static ButtonPressedCallback onPause;
+    private static ButtonPressedCallback onStop;
+    private static ButtonPressedCallback onNext;
+    private static ButtonPressedCallback onPrevious;
+    private static SeekCallback onSeek;
+    private static RateCallback onRate;
+    private static ShuffleCallback onShuffle;
+    private static LoopStatusCallback onLoop;
+
     @Override
-    public void setCallbacks(JMTCCallbacks callbacks) {
-        lib.setOnPlay(new ButtonPressedCallback(callbacks.onPlay));
-        lib.setOnPause(new ButtonPressedCallback(callbacks.onPause));
-        lib.setOnStop(new ButtonPressedCallback(callbacks.onStop));
-        lib.setOnNext(new ButtonPressedCallback(callbacks.onNext));
-        lib.setOnPrevious(new ButtonPressedCallback(callbacks.onPrevious));
-        lib.setOnSeek(new SeekCallback(callbacks.onSeek));
-        lib.setOnRateChanged(new RateCallback(callbacks.onRate));
-        lib.setOnShuffleChanged(new ShuffleCallback(callbacks.onShuffle));
-        lib.setOnLoopChanged(new LoopStatusCallback(callbacks.onLoop));
+    public synchronized void setCallbacks(JMTCCallbacks callbacks) {
+        onPlay = new ButtonPressedCallback(callbacks.onPlay);
+        lib.setOnPlay(onPlay);
+        onPause = new ButtonPressedCallback(callbacks.onPause);
+        lib.setOnPause(onPause);
+        onStop = new ButtonPressedCallback(callbacks.onStop);
+        lib.setOnStop(onStop);
+        onNext = new ButtonPressedCallback(callbacks.onNext);
+        lib.setOnNext(onNext);
+        onPrevious = new ButtonPressedCallback(callbacks.onPrevious);
+        lib.setOnPrevious(onPrevious);
+        onSeek = new SeekCallback(callbacks.onSeek);
+        lib.setOnSeek(onSeek);
+        onRate = new RateCallback(callbacks.onRate);
+        lib.setOnRateChanged(onRate);
+        onShuffle = new ShuffleCallback(callbacks.onShuffle);
+        lib.setOnShuffleChanged(onShuffle);
+        onLoop = new LoopStatusCallback(callbacks.onLoop);
+        lib.setOnLoopChanged(onLoop);
     }
 
     @Override
-    public void setTimelineProperties(JMTCTimelineProperties timelineProperties) {
+    public synchronized void setTimelineProperties(JMTCTimelineProperties timelineProperties) {
         lib.setTimelineProperties(timelineProperties.start, timelineProperties.end, timelineProperties.seekStart, timelineProperties.seekEnd);
     }
 
     @Override
-    public void setPosition(Long position) {
+    public synchronized void setPosition(Long position) {
         lib.setPosition(position);
     }
 
     @Override
-    public void updateDisplay() {
+    public synchronized void updateDisplay() {
         lib.update();
     }
 
     @Override
-    public void resetDisplay() {
+    public synchronized void resetDisplay() {
         lib.reset();
     }
 
     @SuppressWarnings({"SwitchStatementWithTooFewBranches"})
     @Override
-    public JMTCMediaType getMediaType() {
+    public synchronized JMTCMediaType getMediaType() {
         int res = lib.getMediaType();
         switch (res) {
             //TODO MediaTypes
@@ -171,7 +192,7 @@ public class WindowsJMTC extends JMTC {
 
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
-    public void setMediaType(JMTCMediaType mediaType) {
+    public synchronized void setMediaType(JMTCMediaType mediaType) {
         switch (mediaType) {
             //TODO MediaTypes
             case Music:
@@ -180,7 +201,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public JMTCMediaProperties getMediaProperties() {
+    public synchronized JMTCMediaProperties getMediaProperties() {
         List<String> genres = new ArrayList<>();
         for (int count = 0; count < lib.getMusicGenresSize(); count++){
             genres.add(lib.getMusicGenreAt(new UnsignedInt(count)).toString());
@@ -200,7 +221,7 @@ public class WindowsJMTC extends JMTC {
     }
 
     @Override
-    public void setMediaProperties(JMTCMediaProperties mediaProperties) {
+    public synchronized void setMediaProperties(JMTCMediaProperties mediaProperties) {
         if (mediaProperties.getClass() == JMTCMusicProperties.class) {
             JMTCMusicProperties mediaPropertiesCast = (JMTCMusicProperties) mediaProperties;
             lib.setMusicTitle(new WString(mediaPropertiesCast.title));
@@ -219,7 +240,12 @@ public class WindowsJMTC extends JMTC {
             }
             if (((JMTCMusicProperties) mediaProperties).art != null) {
                 lib.setThumbnail(new WString(((JMTCMusicProperties) mediaProperties).art.toURI().toString()));
-                System.out.println(((JMTCMusicProperties) mediaProperties).art.toURI().toString());
+                while (!lib.thumbnailLoaded()){
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                    }
+                }
             }
         }
     }

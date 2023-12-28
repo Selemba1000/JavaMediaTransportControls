@@ -5,7 +5,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 import org.graalvm.compiler.hotspot.stubs.VerifyOopStub;
 
-interface SMTCAdapter extends Library {
+public interface SMTCAdapter extends Library {
     void init();
 
     void setOnPlay(ButtonPressedCallback callback);
@@ -78,6 +78,7 @@ interface SMTCAdapter extends Library {
 
     void setMediaType(int type);
 
+    Boolean thumbnailLoaded();
     void setThumbnail(WString path);
 
     WString getMusicTitle();
