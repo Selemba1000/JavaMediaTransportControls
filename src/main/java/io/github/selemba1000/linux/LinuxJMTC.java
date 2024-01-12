@@ -141,11 +141,6 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
                 //TODO logging
             }
             this.enabled = true;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             Field[] fields = this.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)) {
