@@ -68,11 +68,16 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     protected JMTCCallbacks callbacks;
     private DBusConnection connection;
 
+    private Boolean enabled = false;
+
+    private String playerName;
+
     public LinuxJMTC(String playerName, String desktopFile) {
         try {
+            this.playerName = playerName;
             connection = DBusConnectionBuilder.forSessionBus().build();
-            connection.requestBusName("org.mpris.MediaPlayer2." + playerName);
-            connection.exportObject("/org/mpris/MediaPlayer2", this);
+            //connection.requestBusName("org.mpris.MediaPlayer2." + playerName);
+            //connection.exportObject("/org/mpris/MediaPlayer2", this);
         } catch (Exception e) {
             System.out.println("conn failed: " + e.getMessage());
         }
@@ -101,8 +106,6 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
                 return JMTCPlayingState.PLAYING;
             case "Paused":
                 return JMTCPlayingState.PAUSED;
-            case "Stopped":
-                return JMTCPlayingState.CLOSED;
             default:
                 return JMTCPlayingState.STOPPED;
         }
@@ -125,12 +128,27 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
 
     @Override
     public boolean getEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-
+        if(enabled && !this.enabled){
+            try {
+                connection.requestBusName("org.mpris.MediaPlayer2." + playerName);
+                connection.exportObject("/org/mpris/MediaPlayer2", this);
+                this.enabled = true;
+            }catch (Exception e){
+                //TODO logging
+            }
+        }else if(this.enabled){
+            try {
+                connection.releaseBusName("org.mpris.MediaPlayer2." + playerName);
+                this.enabled = false;
+            }catch (Exception e){
+                //TODO logging
+            }
+        }
     }
 
     @Override
