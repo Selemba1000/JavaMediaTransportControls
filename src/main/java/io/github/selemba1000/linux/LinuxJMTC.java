@@ -88,7 +88,7 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
             if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)) {
                 try {
                     ((SignaledDBusPropertyInterface) field.get(this)).ProvideConnection(connection);
-                    ((SignaledDBusPropertyInterface) field.get(this)).signal();
+                    //((SignaledDBusPropertyInterface) field.get(this)).signal();
                 } catch (Exception e) {
                     //TODO logging
                 }
@@ -137,17 +137,33 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
             try {
                 connection.requestBusName("org.mpris.MediaPlayer2." + playerName);
                 connection.exportObject("/org/mpris/MediaPlayer2", this);
-                this.enabled = true;
             }catch (Exception e){
                 //TODO logging
             }
-        }else if(this.enabled){
+            this.enabled = true;
             try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Field[] fields = this.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if (Arrays.asList(field.getType().getInterfaces()).contains(SignaledDBusPropertyInterface.class)) {
+                    try {
+                        ((SignaledDBusPropertyInterface) field.get(this)).signal();
+                    } catch (Exception e) {
+                        //TODO logging
+                    }
+                }
+            }
+        }else if(!enabled && this.enabled){
+            try {
+                connection.unExportObject("/org/mpris/MediaPlayer2");
                 connection.releaseBusName("org.mpris.MediaPlayer2." + playerName);
-                this.enabled = false;
             }catch (Exception e){
                 //TODO logging
             }
+            this.enabled = false;
         }
     }
 
@@ -334,7 +350,6 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
         } catch (Exception e) {
             //TODO logging
         }
-        System.out.println(ret);
         return ret;
     }
 
