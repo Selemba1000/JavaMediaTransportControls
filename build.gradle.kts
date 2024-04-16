@@ -15,9 +15,9 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation("net.java.dev.jna:jna:5.13.0")
-    implementation("com.github.hypfvieh:dbus-java-core:4.3.1")
-    implementation("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:4.3.1")
+    implementation("net.java.dev.jna:jna:5.14.0")
+    implementation("com.github.hypfvieh:dbus-java-core:5.0.0")
+    implementation("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:5.0.0")
 }
 
 tasks.withType<Test>().configureEach {
