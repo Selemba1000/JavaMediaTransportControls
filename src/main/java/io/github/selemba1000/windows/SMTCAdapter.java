@@ -1,9 +1,7 @@
 package io.github.selemba1000.windows;
 
 import com.sun.jna.Library;
-import com.sun.jna.Pointer;
 import com.sun.jna.WString;
-import org.graalvm.compiler.hotspot.stubs.VerifyOopStub;
 
 public interface SMTCAdapter extends Library {
     void init();
