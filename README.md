@@ -89,5 +89,15 @@ jmtc.setPosition(100L);
 ```
 For more information see the JavaDoc in code.
 
+## Building Windows native library
+The required library's come prebuilt, so this is only needed if you want to change native code.
+### Requirements
+Windows 10 SDK has to be installed, and MSBuild has to be available in PATH.
+### Building
+Just execute the gradle tasks "build native" -> "copy_release" or "copy_debug"
+to automatically compile and copy the library's to the required folders.
+
+Use the task "clean_native" to clear compilation results and temp files.
+
 ## License
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
