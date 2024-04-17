@@ -16,7 +16,7 @@ public class JMTCEnabledButtons {
     public boolean isPauseEnabled;
     /**
      * Stop button enabled state.
-     * @apiNote Ignored on Linux.
+     * Ignored on Linux.
      */
     public boolean isStopEnabled;
     /**

@@ -13,7 +13,7 @@ public abstract class JMTC {
     /**
      * Returns the singleton instance of JMTC.
      * Entry point for the library.
-     * @apiNote Keep the Instance from getting GC'd
+     * Keep the Instance from getting GC'd
      * @param settings Settings for setting up the instance. Only used on first call.
      * @return JMTC
      */
@@ -46,7 +46,7 @@ public abstract class JMTC {
 
     /**
      * Getter for the Enabled State
-     * @apiNote Only works on Windows
+     * Only works on Windows
      * @return boolean The current Enabled State
      */
     @SuppressWarnings("unused")
@@ -54,7 +54,7 @@ public abstract class JMTC {
 
     /**
      * Setter for the Enabled State
-     * @apiNote Only works on Windows
+     * Only works on Windows
      * @param enabled The new Enabled State
      */
     public abstract void setEnabled(boolean enabled);
@@ -112,7 +112,7 @@ public abstract class JMTC {
 
     /**
      * Updates the System UI with the current values.
-     * @apiNote Only needed on Windows
+     * Only needed on Windows
      */
     public abstract void updateDisplay();
 
@@ -126,7 +126,7 @@ public abstract class JMTC {
      * Getter for the current MediaType.
      * @see JMTCMediaType
      * @return JMTCMediaType The current MediaType.
-     * @apiNote   Only Music is currently supported
+     * Only Music is currently supported
      */
     @SuppressWarnings("unused")
     public abstract JMTCMediaType getMediaType();
@@ -135,7 +135,7 @@ public abstract class JMTC {
      * Setter for the current MediaType.
      * @see JMTCMediaType
      * @param mediaType The new MediaType.
-     * @apiNote   Only Music is currently supported
+     * Only Music is currently supported
      */
     public abstract void setMediaType(JMTCMediaType mediaType);
 

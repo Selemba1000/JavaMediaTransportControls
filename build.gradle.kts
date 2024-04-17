@@ -1,38 +1,81 @@
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SonatypeHost
 import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    `maven-publish`
+    //`maven-publish`
+    //signing
+    id("com.vanniktech.maven.publish") version "0.28.0"
 }
 
-val group = "io.github.selemba1000"
-val version = "1.0.0"
+val groupVal = "io.github.selemba1000"
+val nameVal = "JavaMediaTransportControls"
+val versionVal = "0.0.1"
 
 repositories {
     mavenCentral()
+}
+
+java{
+    //withJavadocJar()
+    //withSourcesJar()
 }
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("net.java.dev.jna:jna:5.14.0")
-    implementation("com.github.hypfvieh:dbus-java-core:5.0.0")
-    implementation("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:5.0.0")
+    implementation("com.github.hypfvieh:dbus-java-core:4.3.1")
+    implementation("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:4.3.1")
 }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = group//"io.github.selemba1000"
-            artifactId = "JavaMediaTransportControls"
-            version = version//"1.0.0"
+mavenPublishing{
+    coordinates(groupVal,nameVal,versionVal)
 
-            from(components["java"])
+    configure(JavaLibrary(
+        javadocJar = JavadocJar.Javadoc(),
+        sourcesJar = true
+    ))
+
+    pom {
+        name.set("JavaMediaTransportControls")
+        description.set("A simple Java library to interface with system media controls.")
+        url.set("https://github.com/Selemba1000/JavaMediaTransportControls")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
         }
+        developers {
+            developer {
+                id.set("Selemba1000")
+                name.set("Sebastian Lempik")
+                email.set("sebastian.lempik@gmx.de")
+                url.set("https://github.com/Selemba1000")
+            }
+        }
+        scm {
+            connection.set("scm:git:git://https://github.com/Selemba1000/JavaMediaTransportControls.git")
+            developerConnection.set("scm:git:ssh://git@github.com:Selemba1000/JavaMediaTransportControls.git")
+            url.set("https://github.com/Selemba1000/JavaMediaTransportControls")
+        }
+    }
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+}
+
+tasks.javadoc {
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
 }
 

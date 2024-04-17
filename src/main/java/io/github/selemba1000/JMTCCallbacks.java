@@ -38,28 +38,28 @@ public class JMTCCallbacks {
     /**
      * Callback for when the shuffle button is pressed in UI.
      * var x is true if shuffle is supposed to be enabled, false otherwise
-     * @apiNote The state of shuffle is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
+     * The state of shuffle is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
      */
     public JMTCValueChangedCallback<Boolean> onShuffle = (Boolean x) -> {
     };
     /**
      * Callback for when the rate slider is moved in UI.
      * var x is the new rate value
-     * @apiNote The state of rate is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
+     * The state of rate is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
      */
     public JMTCValueChangedCallback<Double> onRate = (Double x) -> {
     };
     /**
      * Callback for when the loop button is pressed in UI.
      * var x is the new loop status
-     * @apiNote The state of loop is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
+     * The state of loop is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
      */
     public JMTCValueChangedCallback<JMTCParameters.LoopStatus> onLoop = (JMTCParameters.LoopStatus x) -> {
     };
     /**
      * Callback for when the volume slider is moved in UI.
      * var x is the new volume value
-     * @apiNote The state of volume is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
+     * The state of volume is not automatically updated. Should be manually updated in callback, or ignored if not applicable.
      */
     public JMTCValueChangedCallback<Double> onVolume = (Double x) -> {
     };
