@@ -18,8 +18,18 @@ JMTC is a lightweight Java library that integrates a Java application with the M
 ### Prerequisites
 - Java 8 or later
 ### Installation
-#### Maven Repaository
-**TODO** This Library is not yet available on a Maven repository.
+#### Maven Central
+This library is available on the Maven Central repository.
+To use this library just add the following to your build.gradle.kts:
+```Kotlin
+repositories {
+    mavenCentral()
+}
+dependencies{
+    implementation("io.github.selemba1000:JavaMediaTranportControls:0.0.1")
+}
+```
+Current version is 0.0.1.
 #### Maven Local
 Download this repository via git with:
 ```bash
