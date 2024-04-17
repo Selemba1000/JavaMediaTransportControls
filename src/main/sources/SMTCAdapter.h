@@ -55,7 +55,7 @@ extern "C"{
 	SMTC_API unsigned int getLoop();
 	SMTC_API void setLoop(unsigned int);
 
-	//TODO chnl up down ffd rew shuffle rate
+	//TODO chnl up down ffd rew
 
 	// mapping: 0: Closed; 1: Paused; 2: Stopped; 3: Playing; 4: Changing;
 	SMTC_API unsigned int getPlaybackState();
