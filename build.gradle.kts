@@ -12,7 +12,7 @@ plugins {
 
 val groupVal = "io.github.selemba1000"
 val nameVal = "JavaMediaTransportControls"
-val versionVal = "0.0.1"
+val versionVal = "0.0.2"
 
 repositories {
     mavenCentral()
