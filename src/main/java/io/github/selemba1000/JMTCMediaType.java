@@ -5,5 +5,8 @@ package io.github.selemba1000;
  * Currently only Music is supported.
  */
 public enum JMTCMediaType {
+    /**
+     * Currently the only supported media type
+     */
     Music,
 }

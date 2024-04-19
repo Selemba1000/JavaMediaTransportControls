@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Central class for all Linux related interfacing.
+ */
 public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player, Properties {
 
     private static final String generalInterface = "org.mpris.MediaPlayer2";
@@ -65,13 +68,24 @@ public class LinuxJMTC extends JMTC implements MPRISPlayer2, MPRISPlayer2Player,
     final SignaledDBusProperty<Boolean> CanSeek = new SignaledDBusProperty<>(true, "CanSeek", getObjectPath(), playerInterface);
     @SuppressWarnings("unused")
     final DBusProperty<Boolean> CanControl = new DBusProperty<>(true, "CanControl");
+    /**
+     * Internal reference to all callbacks.
+     */
     protected JMTCCallbacks callbacks;
+    /**
+     * Internal reference to the dbus connection.
+     */
     private DBusConnection connection;
 
     private Boolean enabled = false;
 
     private String playerName;
 
+    /**
+     * Constructor to set up JMTC for Linux
+     * @param playerName a unique name for this instance
+     * @param desktopFile the desktop file of the app without the extension
+     */
     public LinuxJMTC(String playerName, String desktopFile) {
         try {
             this.playerName = playerName;

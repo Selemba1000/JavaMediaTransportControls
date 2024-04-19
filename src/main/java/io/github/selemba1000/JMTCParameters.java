@@ -54,8 +54,17 @@ public class JMTCParameters {
      * Track = Loop current Track
      */
     public enum LoopStatus {
+        /**
+         * Repeat nothing. Stop after last Song
+         */
         None,
+        /**
+         * Repeat the Playlist after the last song
+         */
         Playlist,
+        /**
+         * Repeat only the currently playing track
+         */
         Track
     }
 }

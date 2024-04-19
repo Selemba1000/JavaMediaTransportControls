@@ -26,10 +26,10 @@ repositories {
     mavenCentral()
 }
 dependencies{
-    implementation("io.github.selemba1000:JavaMediaTranportControls:0.0.1")
+    implementation("io.github.selemba1000:JavaMediaTranportControls:0.0.2")
 }
 ```
-Current version is 0.0.1.
+Current version is 0.0.2.
 #### Maven Local
 Download this repository via git with:
 ```bash

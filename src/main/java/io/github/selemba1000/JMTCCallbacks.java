@@ -6,6 +6,12 @@ package io.github.selemba1000;
 @SuppressWarnings("CanBeFinal")
 public class JMTCCallbacks {
     /**
+     * Creates an empty instance to be filled by property access
+     */
+    public JMTCCallbacks() {
+    }
+
+    /**
      * Callback for when Play button is pressed in UI or as MediaKey.
      */
     public JMTCButtonCallback onPlay = () -> {

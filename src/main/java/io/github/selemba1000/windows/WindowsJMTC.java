@@ -1,19 +1,25 @@
 package io.github.selemba1000.windows;
 
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 import io.github.selemba1000.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
+/**
+ * The class that contains the Windows implementation
+ */
 public class WindowsJMTC extends JMTC {
 
-    public final SMTCAdapter lib;
+    /**
+     * The Internal reference to the native library
+     */
+    protected final SMTCAdapter lib;
 
+    /**
+     * Constructor to set up JMTC for Windows.
+     */
     public WindowsJMTC() {
         super();
         lib = Native.load("SMTCAdapter", SMTCAdapter.class);

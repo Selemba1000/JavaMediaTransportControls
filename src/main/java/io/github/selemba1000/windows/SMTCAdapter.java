@@ -3,6 +3,9 @@ package io.github.selemba1000.windows;
 import com.sun.jna.Library;
 import com.sun.jna.WString;
 
+/**
+ * The interface definition for JNA.
+ */
 public interface SMTCAdapter extends Library {
     void init();
 

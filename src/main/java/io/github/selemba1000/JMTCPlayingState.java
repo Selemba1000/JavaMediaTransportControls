@@ -14,10 +14,24 @@ package io.github.selemba1000;
  * Changing = the player is changing the file. Windows only
  */
 public enum JMTCPlayingState {
+    /**
+     * Media is currently playing
+     */
     PLAYING,
+    /**
+     * Media is currently paused
+     */
     PAUSED,
+    /**
+     * Media is stopped. Usually when media was selected, but not started.
+     */
     STOPPED,
+    /**
+     * Currently no media loaded.
+     */
     CLOSED,
+    /**
+     * The Media is currently changing/loading.
+     */
     CHANGING,
-
 }

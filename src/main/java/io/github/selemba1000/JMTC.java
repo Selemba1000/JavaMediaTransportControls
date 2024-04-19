@@ -3,10 +3,19 @@ package io.github.selemba1000;
 import io.github.selemba1000.linux.LinuxJMTC;
 import io.github.selemba1000.windows.WindowsJMTC;
 
+/**
+ * This singleton is the entrypoint to the library. Use getInstance to access the functions of the library
+ */
 public abstract class JMTC {
 
+    /**
+     * Instance reference to implement singleton pattern
+     */
     protected static JMTC INSTANCE;
 
+    /**
+     * Internal constructor to implement singleton pattern.
+     */
     protected JMTC() {
     }
 
