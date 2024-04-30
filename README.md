@@ -16,7 +16,7 @@ JMTC is a lightweight Java library that integrates a Java application with the M
 - [ ] Mac (TODO currently I have no test system)
 ## Getting Started
 ### Prerequisites
-- Java 8 or later
+- Java 21 or later
 ### Installation
 #### Maven Central
 This library is available on the Maven Central repository.
