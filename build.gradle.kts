@@ -12,7 +12,7 @@ plugins {
 
 val groupVal = "io.github.selemba1000"
 val nameVal = "JavaMediaTransportControls"
-val versionVal = "0.0.2"
+val versionVal = "0.0.3"
 
 repositories {
     mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("net.java.dev.jna:jna:5.14.0")
     implementation("com.github.hypfvieh:dbus-java-core:5.0.0")
-    implementation("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:5.0.0")
+    implementation("com.github.hypfvieh:dbus-java-transport-native-unixsocket:5.0.0")
 }
 
 tasks.withType<Test>().configureEach {
